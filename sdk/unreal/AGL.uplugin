@@ -1,0 +1,41 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "FriendlyName": "AGL - AI Game Companion Engine",
+  "Description": "Unreal Engine SDK for integrating AGL emotion analysis, dynamic dialogue, and memory systems into your game",
+  "Category": "AI",
+  "CreatedBy": "AGL Team",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "SupportURL": "",
+  "CanContainContent": false,
+  "IsBetaVersion": true,
+  "IsExperimentalVersion": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "AGL",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "WhitelistPlatforms": [
+        "Win64",
+        "Linux",
+        "Mac",
+        "Android",
+        "IOS"
+      ]
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "JsonUtilities",
+      "Enabled": true
+    },
+    {
+      "Name": "Json",
+      "Enabled": true
+    }
+  ]
+}

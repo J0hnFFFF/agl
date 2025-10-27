@@ -1,0 +1,236 @@
+// Prisma schema for AGL API Service
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Clients (Game developers using our service)
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  apiKey    String   @unique @map("api_key")
+  tier      Tier     @default(FREE)
+  quotaPerMonth Int  @map("quota_per_month") @default(10000)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  games     Game[]
+
+  @@map("clients")
+}
+
+enum Tier {
+  FREE
+  STANDARD
+  PRO
+  ENTERPRISE
+}
+
+// Games registered by clients
+model Game {
+  id          String   @id @default(uuid())
+  clientId    String   @map("client_id")
+  name        String
+  description String?
+  config      Json?    // Game-specific configuration
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  players     Player[]
+
+  @@map("games")
+}
+
+// Players within games
+model Player {
+  id          String   @id @default(uuid())
+  gameId      String   @map("game_id")
+  externalId  String   @map("external_id") // Game's internal player ID
+  characterPersona String @map("character_persona") @default("cheerful")
+  preferences Json?    // Player-specific preferences
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  game        Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  memories    Memory[]
+  events      GameEvent[]
+
+  @@unique([gameId, externalId])
+  @@map("players")
+}
+
+// Long-term memories for players
+model Memory {
+  id          String   @id @default(uuid())
+  playerId    String   @map("player_id")
+  type        String   // achievement, milestone, conversation, etc.
+  content     String
+  emotion     String?
+  importance  Float    @default(0.5) // 0.0 to 1.0
+  context     Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  player      Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, createdAt(sort: Desc)])
+  @@map("memories")
+}
+
+// Game events log (for analytics)
+model GameEvent {
+  id          BigInt   @id @default(autoincrement())
+  playerId    String   @map("player_id")
+  eventType   String   @map("event_type")
+  data        Json
+  context     Json?
+  emotion     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  player      Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, createdAt(sort: Desc)])
+  @@index([eventType, createdAt(sort: Desc)])
+  @@map("game_events")
+}
+
+// Service metrics for analytics
+model ServiceMetric {
+  id          BigInt   @id @default(autoincrement())
+  service     ServiceType
+  operation   String   // e.g., "analyze_emotion", "generate_dialogue", "search_memory"
+  playerId    String?  @map("player_id")
+  gameId      String?  @map("game_id")
+  latencyMs   Int      @map("latency_ms")
+  statusCode  Int      @map("status_code")
+  method      String?  // e.g., "rule", "ml", "template", "llm", "cached"
+  cost        Float    @default(0) // Cost in USD
+  metadata    Json?    // Additional metric data
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([service, createdAt(sort: Desc)])
+  @@index([gameId, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("service_metrics")
+}
+
+enum ServiceType {
+  EMOTION
+  DIALOGUE
+  MEMORY
+  API
+  REALTIME
+}
+
+// Daily analytics aggregations
+model DailyAnalytics {
+  id                    BigInt   @id @default(autoincrement())
+  date                  DateTime @db.Date
+  gameId                String?  @map("game_id")
+
+  // Event statistics
+  totalEvents           Int      @default(0) @map("total_events")
+  uniquePlayers         Int      @default(0) @map("unique_players")
+
+  // Emotion statistics
+  emotionRequests       Int      @default(0) @map("emotion_requests")
+  emotionRuleCount      Int      @default(0) @map("emotion_rule_count")
+  emotionMlCount        Int      @default(0) @map("emotion_ml_count")
+  emotionCachedCount    Int      @default(0) @map("emotion_cached_count")
+  emotionAvgLatency     Float    @default(0) @map("emotion_avg_latency")
+  emotionCost           Float    @default(0) @map("emotion_cost")
+
+  // Dialogue statistics
+  dialogueRequests      Int      @default(0) @map("dialogue_requests")
+  dialogueTemplateCount Int      @default(0) @map("dialogue_template_count")
+  dialogueLlmCount      Int      @default(0) @map("dialogue_llm_count")
+  dialogueCachedCount   Int      @default(0) @map("dialogue_cached_count")
+  dialogueAvgLatency    Float    @default(0) @map("dialogue_avg_latency")
+  dialogueCost          Float    @default(0) @map("dialogue_cost")
+
+  // Memory statistics
+  memoryCreated         Int      @default(0) @map("memory_created")
+  memorySearches        Int      @default(0) @map("memory_searches")
+  memoryAvgLatency      Float    @default(0) @map("memory_avg_latency")
+  memoryCost            Float    @default(0) @map("memory_cost")
+
+  // Emotion distribution (JSON object with emotion counts)
+  emotionDistribution   Json?    @map("emotion_distribution")
+
+  // Total cost
+  totalCost             Float    @default(0) @map("total_cost")
+
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@unique([date, gameId])
+  @@index([date(sort: Desc)])
+  @@index([gameId, date(sort: Desc)])
+  @@map("daily_analytics")
+}
+
+// Hourly analytics for real-time monitoring
+model HourlyAnalytics {
+  id                    BigInt   @id @default(autoincrement())
+  hour                  DateTime @db.Timestamp()
+  gameId                String?  @map("game_id")
+
+  totalEvents           Int      @default(0) @map("total_events")
+  emotionRequests       Int      @default(0) @map("emotion_requests")
+  dialogueRequests      Int      @default(0) @map("dialogue_requests")
+  memoryOperations      Int      @default(0) @map("memory_operations")
+
+  avgLatency            Float    @default(0) @map("avg_latency")
+  errorCount            Int      @default(0) @map("error_count")
+  totalCost             Float    @default(0) @map("total_cost")
+
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  @@unique([hour, gameId])
+  @@index([hour(sort: Desc)])
+  @@index([gameId, hour(sort: Desc)])
+  @@map("hourly_analytics")
+}
+
+// HTTP Request performance metrics
+model RequestMetric {
+  id          BigInt   @id @default(autoincrement())
+  method      String   // GET, POST, PUT, DELETE, etc.
+  path        String   // Request path
+  statusCode  Int      @map("status_code")
+  durationMs  Float    @map("duration_ms")
+  timestamp   DateTime
+  userAgent   String?  @map("user_agent")
+  ip          String?
+
+  @@index([timestamp(sort: Desc)])
+  @@index([path, timestamp(sort: Desc)])
+  @@index([durationMs(sort: Desc)])
+  @@map("request_metrics")
+}
+
+// Cost tracking for AI/LLM services
+model CostMetric {
+  id          BigInt   @id @default(autoincrement())
+  service     String   // "dialogue", "emotion", "memory"
+  method      String   // "rule", "template", "ml", "llm", "cached"
+  cost        Float    // Cost in USD
+  gameId      String?  @map("game_id")
+  playerId    String?  @map("player_id")
+  timestamp   DateTime
+  metadata    Json?    // Additional context (tokens, model used, etc.)
+
+  @@index([timestamp(sort: Desc)])
+  @@index([service, timestamp(sort: Desc)])
+  @@index([gameId, timestamp(sort: Desc)])
+  @@index([cost(sort: Desc)])
+  @@map("cost_metrics")
+}

@@ -1,0 +1,29 @@
+# Source files (only publish dist/)
+src/
+tsconfig.json
+rollup.config.js
+
+# Examples
+examples/
+
+# Tests
+*.test.ts
+*.spec.ts
+__tests__/
+coverage/
+
+# Development files
+.gitignore
+.eslintrc.js
+.prettierrc
+
+# Documentation (keep README)
+docs/
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.log
+.DS_Store

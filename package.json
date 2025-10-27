@@ -1,0 +1,46 @@
+{
+  "name": "agl",
+  "version": "0.1.0",
+  "description": "AI Game Companion Engine - Cloud service for emotional AI companions in games",
+  "private": true,
+  "workspaces": [
+    "services/api-service",
+    "services/realtime-gateway",
+    "services/memory-service",
+    "sdk/web",
+    "sdk/avatar"
+  ],
+  "scripts": {
+    "setup": "npm install && npm run setup:python",
+    "setup:python": "cd services/emotion-service && pip install -r requirements.txt && cd ../dialogue-service && pip install -r requirements.txt",
+    "dev:stack": "docker-compose up -d",
+    "dev:stack:down": "docker-compose down",
+    "dev:api": "npm run dev --workspace=services/api-service",
+    "dev:realtime": "npm run dev --workspace=services/realtime-gateway",
+    "dev:memory": "npm run dev --workspace=services/memory-service",
+    "dev:emotion": "cd services/emotion-service && uvicorn main:app --reload --port 8000",
+    "dev:dialogue": "cd services/dialogue-service && uvicorn main:app --reload --port 8001",
+    "build": "npm run build --workspaces",
+    "build:docker": "docker-compose -f docker-compose.prod.yml build",
+    "test": "npm run test --workspaces",
+    "test:api": "npm run test --workspace=services/api-service",
+    "test:realtime": "npm run test --workspace=services/realtime-gateway",
+    "test:integration": "npm run test:integration --workspace=services/api-service",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:migrate": "npm run migrate --workspace=services/api-service",
+    "db:seed": "npm run seed --workspace=services/api-service",
+    "db:reset": "npm run db:reset --workspace=services/api-service",
+    "deploy:staging": "sh scripts/deploy-staging.sh",
+    "deploy:prod": "sh scripts/deploy-prod.sh"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

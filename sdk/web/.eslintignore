@@ -1,0 +1,17 @@
+# Build output
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Coverage
+coverage/
+
+# Test snapshots
+**/__snapshots__/
+
+# Config files
+*.config.js
+rollup.config.js
+jest.config.js

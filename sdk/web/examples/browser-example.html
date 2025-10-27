@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGL Web SDK - Browser Example</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #667eea;
+      margin-top: 0;
+    }
+
+    .section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f7f9fc;
+      border-radius: 5px;
+      border-left: 4px solid #667eea;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #5568d3;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .output {
+      background: #2d3748;
+      color: #48bb78;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .companion {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .companion-emoji {
+      font-size: 64px;
+      margin: 10px;
+    }
+
+    .dialogue {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2d3748;
+      margin: 10px 0;
+      min-height: 60px;
+    }
+
+    .emotion-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background: #667eea;
+      color: white;
+      border-radius: 15px;
+      font-size: 12px;
+      margin: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎮 AGL Web SDK Demo</h1>
+
+    <!-- Configuration Section -->
+    <div class="section">
+      <h3>Configuration</h3>
+      <label>Player ID:</label>
+      <input type="text" id="playerId" value="demo-player-123" />
+
+      <label>Game ID:</label>
+      <input type="text" id="gameId" value="demo-game" />
+
+      <button onclick="initializeSDK()">Initialize SDK</button>
+      <span id="initStatus"></span>
+    </div>
+
+    <!-- Companion Display -->
+    <div class="companion">
+      <div class="companion-emoji" id="companionEmoji">😊</div>
+      <div class="dialogue" id="companionDialogue">Hello! I'm your AI companion. Try triggering some events!</div>
+      <div id="emotionBadges"></div>
+    </div>
+
+    <!-- Event Triggers -->
+    <div class="section">
+      <h3>Trigger Events</h3>
+      <button onclick="triggerVictory()">🏆 Victory (MVP)</button>
+      <button onclick="triggerDefeat()">😔 Defeat</button>
+      <button onclick="triggerAchievement()">⭐ Achievement</button>
+      <button onclick="triggerKill()">💥 Kill Streak</button>
+      <button onclick="triggerLevelUp()">📈 Level Up</button>
+    </div>
+
+    <!-- Memory Management -->
+    <div class="section">
+      <h3>Memory System</h3>
+      <button onclick="createMemory()">💾 Create Memory</button>
+      <button onclick="searchMemories()">🔍 Search Memories</button>
+      <button onclick="getRecentMemories()">📚 Get Recent</button>
+    </div>
+
+    <!-- Debug Output -->
+    <div class="section">
+      <h3>Debug Output</h3>
+      <div class="output" id="output">Waiting for SDK initialization...</div>
+    </div>
+  </div>
+
+  <!-- Load SDK (use CDN or local build) -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="../dist/index.umd.js"></script>
+
+  <script>
+    let agl = null;
+    let eventCounter = {
+      victories: 0,
+      defeats: 0,
+      achievements: 0,
+      kills: 0,
+      levelUps: 0
+    };
+
+    // Emotion to emoji mapping
+    const emotionEmojis = {
+      happy: '😊',
+      excited: '🤩',
+      amazed: '😲',
+      proud: '😌',
+      satisfied: '😃',
+      cheerful: '😄',
+      grateful: '🙏',
+      sad: '😢',
+      disappointed: '😞',
+      frustrated: '😤',
+      angry: '😠',
+      worried: '😟',
+      tired: '😴',
+      neutral: '😐'
+    };
+
+    function log(message, data) {
+      const output = document.getElementById('output');
+      const timestamp = new Date().toLocaleTimeString();
+      let logMessage = `[${timestamp}] ${message}\n`;
+
+      if (data) {
+        logMessage += JSON.stringify(data, null, 2) + '\n';
+      }
+
+      output.textContent = logMessage + '\n' + output.textContent;
+    }
+
+    function updateCompanion(emotion, dialogue, intensity) {
+      const emoji = emotionEmojis[emotion] || '😊';
+      document.getElementById('companionEmoji').textContent = emoji;
+      document.getElementById('companionDialogue').textContent = dialogue;
+
+      // Update emotion badges
+      const badges = document.getElementById('emotionBadges');
+      badges.innerHTML = `
+        <span class="emotion-badge">${emotion}</span>
+        <span class="emotion-badge">Intensity: ${(intensity * 100).toFixed(0)}%</span>
+      `;
+    }
+
+    function initializeSDK() {
+      try {
+        const playerId = document.getElementById('playerId').value;
+        const gameId = document.getElementById('gameId').value;
+
+        // Initialize with local development URLs
+        agl = new AGLWebSDK.AGLClient({
+          apiKey: 'demo-api-key',
+          apiBaseUrl: 'http://localhost:3000',
+          emotionServiceUrl: 'http://localhost:8000',
+          dialogueServiceUrl: 'http://localhost:8001',
+          memoryServiceUrl: 'http://localhost:3002',
+          timeout: 10000
+        });
+
+        agl.setPlayerId(playerId);
+        agl.setGameId(gameId);
+
+        document.getElementById('initStatus').textContent = '✅ Initialized';
+        document.getElementById('initStatus').style.color = '#48bb78';
+
+        log('SDK Initialized', {
+          playerId,
+          gameId,
+          services: {
+            emotion: 'http://localhost:8000',
+            dialogue: 'http://localhost:8001',
+            memory: 'http://localhost:3002'
+          }
+        });
+
+        updateCompanion('cheerful', 'SDK initialized! Ready to go!', 0.8);
+      } catch (error) {
+        log('Initialization Error', error.message);
+        document.getElementById('initStatus').textContent = '❌ Failed';
+        document.getElementById('initStatus').style.color = '#f56565';
+      }
+    }
+
+    async function triggerVictory() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        eventCounter.victories++;
+        const isMVP = Math.random() > 0.5;
+
+        log('Triggering Victory Event', { isMVP, winStreak: eventCounter.victories });
+
+        // Analyze emotion
+        const emotionResult = await agl.emotion.analyze({
+          type: 'player.victory',
+          data: {
+            mvp: isMVP,
+            winStreak: eventCounter.victories
+          },
+          context: {
+            playerHealth: 100,
+            playerLevel: 15,
+            inCombat: false
+          }
+        });
+
+        log('Emotion Analysis Result', emotionResult);
+
+        // Generate dialogue
+        const dialogueResult = await agl.dialogue.generate({
+          event_type: 'player.victory',
+          emotion: emotionResult.emotion,
+          persona: 'cheerful',
+          player_id: agl.getPlayerId()
+        });
+
+        log('Dialogue Generated', dialogueResult);
+
+        updateCompanion(emotionResult.emotion, dialogueResult.dialogue, emotionResult.intensity);
+
+        // Create memory for significant wins
+        if (eventCounter.victories % 3 === 0) {
+          await agl.memory.create(agl.getPlayerId(), {
+            type: 'achievement',
+            content: `Won ${eventCounter.victories} matches${isMVP ? ' as MVP' : ''}`,
+            emotion: emotionResult.emotion,
+            importance: isMVP ? 8 : 6
+          });
+          log('Memory Created', { victories: eventCounter.victories });
+        }
+
+      } catch (error) {
+        log('Victory Event Error', error.message);
+      }
+    }
+
+    async function triggerDefeat() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        eventCounter.defeats++;
+
+        log('Triggering Defeat Event', { lossStreak: eventCounter.defeats });
+
+        const emotionResult = await agl.emotion.analyze({
+          type: 'player.defeat',
+          data: {
+            lossStreak: eventCounter.defeats
+          }
+        });
+
+        const dialogueResult = await agl.dialogue.generate({
+          event_type: 'player.defeat',
+          emotion: emotionResult.emotion,
+          persona: 'cheerful',
+          player_id: agl.getPlayerId()
+        });
+
+        log('Emotion & Dialogue', { emotionResult, dialogueResult });
+        updateCompanion(emotionResult.emotion, dialogueResult.dialogue, emotionResult.intensity);
+
+      } catch (error) {
+        log('Defeat Event Error', error.message);
+      }
+    }
+
+    async function triggerAchievement() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        eventCounter.achievements++;
+        const rarities = ['common', 'epic', 'legendary'];
+        const rarity = rarities[Math.floor(Math.random() * rarities.length)];
+
+        log('Triggering Achievement Event', { rarity });
+
+        const request = AGLWebSDK.AGLHelpers.createAchievementRequest(rarity);
+        const emotionResult = await agl.emotion.analyze(request);
+
+        const dialogueResult = await agl.dialogue.generate({
+          event_type: 'player.achievement',
+          emotion: emotionResult.emotion,
+          persona: 'cute',
+          player_id: agl.getPlayerId(),
+          context: { rarity }
+        });
+
+        log('Achievement Response', { emotionResult, dialogueResult });
+        updateCompanion(emotionResult.emotion, dialogueResult.dialogue, emotionResult.intensity);
+
+        // Always create memory for achievements
+        await agl.memory.create(agl.getPlayerId(), {
+          type: 'achievement',
+          content: `Unlocked a ${rarity} achievement`,
+          emotion: emotionResult.emotion,
+          importance: rarity === 'legendary' ? 10 : rarity === 'epic' ? 7 : 5,
+          context: { rarity }
+        });
+
+      } catch (error) {
+        log('Achievement Event Error', error.message);
+      }
+    }
+
+    async function triggerKill() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        eventCounter.kills += Math.floor(Math.random() * 3) + 1;
+        const isLegendary = eventCounter.kills >= 10;
+
+        log('Triggering Kill Event', { killCount: eventCounter.kills, isLegendary });
+
+        const request = AGLWebSDK.AGLHelpers.createKillRequest(eventCounter.kills, isLegendary);
+        const emotionResult = await agl.emotion.analyze(request);
+
+        const dialogueResult = await agl.dialogue.generate({
+          event_type: 'player.kill',
+          emotion: emotionResult.emotion,
+          persona: 'cool',
+          player_id: agl.getPlayerId()
+        });
+
+        log('Kill Streak Response', { emotionResult, dialogueResult });
+        updateCompanion(emotionResult.emotion, dialogueResult.dialogue, emotionResult.intensity);
+
+      } catch (error) {
+        log('Kill Event Error', error.message);
+      }
+    }
+
+    async function triggerLevelUp() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        eventCounter.levelUps++;
+
+        log('Triggering Level Up Event', { level: eventCounter.levelUps });
+
+        const emotionResult = await agl.emotion.analyze({
+          type: 'player.levelup',
+          data: {
+            newLevel: eventCounter.levelUps,
+            skillPointsGained: 3
+          }
+        });
+
+        const dialogueResult = await agl.dialogue.generate({
+          event_type: 'player.levelup',
+          emotion: emotionResult.emotion,
+          persona: 'cheerful',
+          player_id: agl.getPlayerId()
+        });
+
+        log('Level Up Response', { emotionResult, dialogueResult });
+        updateCompanion(emotionResult.emotion, dialogueResult.dialogue, emotionResult.intensity);
+
+      } catch (error) {
+        log('Level Up Event Error', error.message);
+      }
+    }
+
+    async function createMemory() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        log('Creating Manual Memory');
+
+        const memory = await agl.memory.create(agl.getPlayerId(), {
+          type: 'observation',
+          content: 'Player seems to enjoy victory celebrations',
+          emotion: 'cheerful',
+          importance: 7,
+          context: {
+            timestamp: new Date().toISOString(),
+            source: 'manual'
+          }
+        });
+
+        log('Memory Created Successfully', memory);
+        updateCompanion('satisfied', 'I\'ll remember that!', 0.7);
+
+      } catch (error) {
+        log('Create Memory Error', error.message);
+      }
+    }
+
+    async function searchMemories() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        log('Searching Memories for "achievement victory"');
+
+        const results = await agl.memory.search(agl.getPlayerId(), {
+          query: 'achievement victory',
+          limit: 5
+        });
+
+        log('Search Results', results);
+
+        if (results.length > 0) {
+          updateCompanion('curious', `Found ${results.length} related memories!`, 0.6);
+        } else {
+          updateCompanion('neutral', 'No memories found yet. Try creating some!', 0.5);
+        }
+
+      } catch (error) {
+        log('Search Memories Error', error.message);
+      }
+    }
+
+    async function getRecentMemories() {
+      if (!agl) {
+        alert('Please initialize SDK first');
+        return;
+      }
+
+      try {
+        log('Getting Recent Memories');
+
+        const memories = await agl.memory.get(agl.getPlayerId(), 10);
+
+        log('Recent Memories', memories);
+
+        if (memories.length > 0) {
+          updateCompanion('thoughtful', `I have ${memories.length} recent memories about you`, 0.6);
+        } else {
+          updateCompanion('neutral', 'No memories yet. Let\'s create some!', 0.5);
+        }
+
+      } catch (error) {
+        log('Get Memories Error', error.message);
+      }
+    }
+
+    // Auto-initialize on page load
+    window.addEventListener('load', () => {
+      log('Page loaded. Click "Initialize SDK" to start.');
+    });
+  </script>
+</body>
+</html>

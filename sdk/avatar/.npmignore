@@ -1,0 +1,11 @@
+src/
+tests/
+examples/
+.storybook/
+coverage/
+*.config.js
+*.config.ts
+tsconfig.json
+.eslintrc.js
+.eslintignore
+.gitignore

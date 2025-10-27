@@ -1,0 +1,7 @@
+dist
+node_modules
+coverage
+.storybook
+storybook-static
+*.config.js
+*.config.ts

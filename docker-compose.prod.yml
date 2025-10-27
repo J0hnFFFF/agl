@@ -1,0 +1,133 @@
+version: '3.9'
+
+services:
+  # API Service
+  api-service:
+    build:
+      context: ./services/api-service
+      dockerfile: ../../infrastructure/docker/Dockerfile.api-service
+    image: agl-api-service:latest
+    container_name: agl-api-service-prod
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - API_SERVICE_PORT=3000
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - agl-network
+
+  # Realtime Gateway
+  realtime-gateway:
+    build:
+      context: ./services/realtime-gateway
+      dockerfile: ../../infrastructure/docker/Dockerfile.realtime-gateway
+    image: agl-realtime-gateway:latest
+    container_name: agl-realtime-gateway-prod
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=${REDIS_URL}
+      - REALTIME_GATEWAY_PORT=3001
+      - CORS_ORIGIN=${CORS_ORIGIN}
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - agl-network
+
+  # Emotion Service
+  emotion-service:
+    build:
+      context: ./services/emotion-service
+      dockerfile: ../../infrastructure/docker/Dockerfile.emotion-service
+    image: agl-emotion-service:latest
+    container_name: agl-emotion-service-prod
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - EMOTION_SERVICE_PORT=8000
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - agl-network
+
+  # Dialogue Service
+  dialogue-service:
+    build:
+      context: ./services/dialogue-service
+      dockerfile: ../../infrastructure/docker/Dockerfile.dialogue-service
+    image: agl-dialogue-service:latest
+    container_name: agl-dialogue-service-prod
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DIALOGUE_SERVICE_PORT=8001
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - agl-network
+
+  # PostgreSQL (for development/testing only - use managed DB in production)
+  postgres:
+    image: postgres:15-alpine
+    container_name: agl-postgres-prod
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-agl_production}
+      POSTGRES_USER: ${POSTGRES_USER:-agl_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - agl-network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: agl-redis-prod
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_prod_data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - agl-network
+
+  # Qdrant
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: agl-qdrant-prod
+    volumes:
+      - qdrant_prod_data:/qdrant/storage
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    restart: unless-stopped
+    networks:
+      - agl-network
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:
+  qdrant_prod_data:
+
+networks:
+  agl-network:
+    driver: bridge

@@ -1,0 +1,84 @@
+# Prometheus configuration for AGL platform monitoring
+
+global:
+  scrape_interval: 15s # Scrape targets every 15 seconds
+  evaluation_interval: 15s # Evaluate rules every 15 seconds
+  scrape_timeout: 10s
+
+  # Attach these labels to any time series or alerts
+  external_labels:
+    cluster: 'agl-production'
+    env: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Load rules once and periodically evaluate them
+rule_files:
+  - "alerts/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # API Service metrics
+  - job_name: 'api-service'
+    static_configs:
+      - targets: ['api-service:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # Realtime Gateway metrics
+  - job_name: 'realtime-gateway'
+    static_configs:
+      - targets: ['realtime-gateway:3001']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # Emotion Service metrics
+  - job_name: 'emotion-service'
+    static_configs:
+      - targets: ['emotion-service:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # Dialogue Service metrics
+  - job_name: 'dialogue-service'
+    static_configs:
+      - targets: ['dialogue-service:8001']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # Memory Service metrics
+  - job_name: 'memory-service'
+    static_configs:
+      - targets: ['memory-service:3002']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # PostgreSQL exporter
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    scrape_interval: 30s
+
+  # Redis exporter
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 30s
+
+  # Qdrant metrics
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant:6333']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Node exporter (system metrics)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 30s

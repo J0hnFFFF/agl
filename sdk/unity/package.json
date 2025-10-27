@@ -1,0 +1,29 @@
+{
+  "name": "com.agl.companion-sdk",
+  "version": "0.1.0",
+  "displayName": "AGL Companion SDK",
+  "description": "Unity SDK for integrating AI companion characters powered by AGL (AI Game Companion Engine)",
+  "unity": "2021.3",
+  "keywords": [
+    "ai",
+    "companion",
+    "emotion",
+    "dialogue",
+    "memory",
+    "nlp"
+  ],
+  "author": {
+    "name": "AGL Team",
+    "email": "support@agl.com"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2"
+  },
+  "samples": [
+    {
+      "displayName": "Basic Integration",
+      "description": "Basic example of integrating AGL companion system",
+      "path": "Samples~/BasicIntegration"
+    }
+  ]
+}
