@@ -1,382 +1,272 @@
-# AGL平台文档索引
+# 📚 Documentation Index
 
-**快速找到你需要的文档**
-
----
-
-## 📖 开始使用
-
-### 新手入门
-
-| 文档 | 描述 | 阅读时间 |
-|------|------|---------|
-| [README.md](./README.md) | 项目总览和特性介绍 | 5分钟 |
-| [QUICKSTART.md](./QUICKSTART.md) | 快速开始指南 | 10分钟 |
-| **[QUICKSTART-MONOLITH.md](./QUICKSTART-MONOLITH.md)** | 🌟 最简单的5分钟开始 | 5分钟 |
-| [DEPLOYMENT-OPTIONS.md](./DEPLOYMENT-OPTIONS.md) | 所有部署方案对比 | 10分钟 |
-
-**推荐路径**：
-1. 先读 `README.md` 了解项目
-2. 再读 `QUICKSTART-MONOLITH.md` 快速开始
-3. 然后读 `DEPLOYMENT-OPTIONS.md` 选择部署方案
+Quick navigation to all AGL documentation.
 
 ---
 
-## 🔧 开发指南
+## 🚀 Getting Started
 
-### 本地开发
+**New to AGL? Start here:**
 
-| 文档 | 内容 | 适用场景 |
-|------|------|---------|
-| **[docs/development-sqlite.md](./docs/development-sqlite.md)** | 🌟 SQLite开发模式 | 本地开发、学习 |
-| [docs/database-comparison.md](./docs/database-comparison.md) | 数据库选择指南 | 选择数据库 |
-| [services/monolith/README.md](./services/monolith/README.md) | Monolith服务文档 | 单体服务 |
-| [CLAUDE.md](./CLAUDE.md) | 完整架构文档 | 理解架构 |
+| Document | Description | Time |
+|----------|-------------|------|
+| [README](./README.md) | Project overview and features | 5 min |
+| **[Quick Start](./QUICKSTART.md)** | Get started in 5 minutes | 10 min |
+| **[Monolith Mode](./QUICKSTART-MONOLITH.md)** | Fastest way to start (1 minute) | 5 min |
+| [Deployment Guide](./DEPLOYMENT.md) | All deployment options | 15 min |
 
-**快速决策**：
-- 想要最简单？ → `development-sqlite.md`
-- 想要接近生产？ → `CLAUDE.md`
-- 想要对比？ → `database-comparison.md`
-
----
-
-## 🚀 部署指南
-
-### 部署选项
-
-| 文档 | 方案 | 成本 | 难度 |
-|------|------|------|------|
-| **[docs/simplified-deployment.md](./docs/simplified-deployment.md)** | 简化部署 | $0-20/月 | ⭐ |
-| [docs/architecture/deployment.md](./docs/architecture/deployment.md) | K8s生产部署 | $200+/月 | ⭐⭐⭐⭐⭐ |
-| [docs/monitoring-setup.md](./docs/monitoring-setup.md) | 监控配置 | - | ⭐⭐⭐ |
-| [docs/performance-optimization.md](./docs/performance-optimization.md) | 性能优化 | - | ⭐⭐⭐⭐ |
-
-**部署路径**：
-1. **开发**: Monolith + SQLite ($0)
-2. **测试**: Railway ($5-20/月)
-3. **生产**: K8s ($200/月)
+**Recommended Path**:
+1. Read `README.md` for overview
+2. Follow `QUICKSTART-MONOLITH.md` to start quickly
+3. Check `DEPLOYMENT.md` for production deployment
 
 ---
 
-## 🎮 SDK文档
+## 🎮 SDKs & Integration
 
-### 客户端集成
+### Client SDKs
 
-| SDK | 文档 | 语言 | 状态 |
-|-----|------|------|------|
-| Unity | [sdk/unity/README.md](./sdk/unity/README.md) | C# | ✅ 完整 |
-| Web | [sdk/web/README.md](./sdk/web/README.md) | TypeScript | ✅ 完整 |
-| Unreal | [sdk/unreal/README.md](./sdk/unreal/README.md) | C++ | ✅ 完整 |
-| **Avatar** | **[sdk/avatar/README.md](./sdk/avatar/README.md)** | TypeScript | ✅ 完整 |
-| **Vision** | **[sdk/vision/README.md](./sdk/vision/README.md)** | TypeScript | ✅ 完整 |
+| SDK | Platform | Language | Documentation |
+|-----|----------|----------|---------------|
+| Unity | Unity 2021+ | C# | [Unity SDK](./sdk/unity/README.md) |
+| Web | Browser/Node.js | TypeScript/JS | [Web SDK](./sdk/web/README.md) |
+| Unreal | UE 5.0+ | C++ | [Unreal SDK](./sdk/unreal/README.md) |
+| Avatar | Web (3D) | TypeScript | [Avatar SDK](./sdk/avatar/README.md) |
+| Vision | Multi-platform | TypeScript | [Vision SDK](./sdk/vision/README.md) |
 
-### SDK指南文档
+### Integration Guides
 
-| 文档 | 内容 |
-|------|------|
-| [docs/sdk/unity.md](./docs/sdk/unity.md) | Unity深度指南 |
-| [docs/sdk/avatar.md](./docs/sdk/avatar.md) | Avatar SDK指南 |
-| [docs/sdk/vision.md](./docs/sdk/vision.md) | Vision SDK指南 |
-
-**选择SDK**：
-- Unity游戏 → `sdk/unity/`
-- Web游戏 → `sdk/web/`
-- Unreal游戏 → `sdk/unreal/`
-- 需要3D形象 → `sdk/avatar/`
-- 需要画面分析 → `sdk/vision/`
+- [Integration Guide](./docs/integration-guide.md) - General integration patterns
+- [Testing Guide](./docs/testing.md) - Testing strategies
 
 ---
 
-## 📡 服务文档
+## 🛠️ Development
 
-### 核心服务
+### Local Development
 
-| 服务 | 文档 | 功能 |
-|------|------|------|
-| Emotion Service | [docs/emotion-system.md](./docs/emotion-system.md) | 情绪识别 |
-| Dialogue Service | [docs/dialogue-system.md](./docs/dialogue-system.md) | 对话生成 |
-| Memory Service | [docs/memory-service.md](./docs/memory-service.md) | 记忆管理 |
-| Analytics | [docs/analytics-dashboard.md](./docs/analytics-dashboard.md) | 数据分析 |
+| Guide | Description | Use Case |
+|-------|-------------|----------|
+| **[SQLite Development](./docs/development-sqlite.md)** | Lightweight local setup | Learning, development |
+| [Database Comparison](./docs/database-comparison.md) | SQLite vs PostgreSQL | Choosing database |
+| [Architecture Guide](./CLAUDE.md) | Complete technical architecture | Understanding system |
 
-### API参考
+### API Documentation
 
-| 文档 | 内容 |
-|------|------|
-| [docs/api/README.md](./docs/api/README.md) | REST API文档 |
-| [docs/api/websocket.md](./docs/api/websocket.md) | WebSocket API |
+- [REST API Reference](./docs/api/README.md) - Complete API documentation
+- [WebSocket API](./docs/api/websocket.md) - Real-time communication
 
 ---
 
-## 🏗️ 架构文档
+## 📡 Services
 
-### 系统设计
+### Core Services
 
-| 文档 | 内容 | 适合人群 |
-|------|------|---------|
-| [CLAUDE.md](./CLAUDE.md) | 完整技术架构 | 架构师、后端开发 |
-| [docs/architecture/system-overview.md](./docs/architecture/system-overview.md) | 系统概览 | 所有人 |
-| [docs/architecture/development.md](./docs/architecture/development.md) | 开发环境配置 | 开发者 |
-| [docs/architecture/deployment.md](./docs/architecture/deployment.md) | 生产部署 | 运维人员 |
-
----
-
-## 🎯 按场景查找
-
-### 我想要...
-
-#### 学习AGL
-
-1. [README.md](./README.md) - 了解项目
-2. [QUICKSTART-MONOLITH.md](./QUICKSTART-MONOLITH.md) - 5分钟开始
-3. [docs/emotion-system.md](./docs/emotion-system.md) - 理解情绪系统
-4. [docs/dialogue-system.md](./docs/dialogue-system.md) - 理解对话系统
-
-#### 快速开发
-
-1. [QUICKSTART-MONOLITH.md](./QUICKSTART-MONOLITH.md) - 最快启动
-2. [docs/development-sqlite.md](./docs/development-sqlite.md) - 开发模式
-3. [sdk/unity/README.md](./sdk/unity/README.md) 或你的平台SDK
-
-#### 集成到游戏
-
-1. 选择SDK：[sdk/unity/](./sdk/unity/) 或 [sdk/web/](./sdk/web/) 或 [sdk/unreal/](./sdk/unreal/)
-2. [docs/integration-guide.md](./docs/integration-guide.md) - 集成指南
-3. [docs/api/README.md](./docs/api/README.md) - API参考
-
-#### 添加3D形象
-
-1. [sdk/avatar/README.md](./sdk/avatar/README.md) - Avatar SDK
-2. [docs/sdk/avatar.md](./docs/sdk/avatar.md) - 详细指南
-
-#### 添加视觉AI
-
-1. [sdk/vision/README.md](./sdk/vision/README.md) - Vision SDK
-2. [docs/sdk/vision.md](./docs/sdk/vision.md) - 详细指南
-
-#### 部署到生产
-
-1. [DEPLOYMENT-OPTIONS.md](./DEPLOYMENT-OPTIONS.md) - 选择方案
-2. [docs/simplified-deployment.md](./docs/simplified-deployment.md) - 简化部署
-3. [docs/architecture/deployment.md](./docs/architecture/deployment.md) - K8s部署
-
-#### 性能优化
-
-1. [docs/performance-optimization.md](./docs/performance-optimization.md) - 优化指南
-2. [docs/database-comparison.md](./docs/database-comparison.md) - 数据库选择
-3. [docs/monitoring-setup.md](./docs/monitoring-setup.md) - 监控设置
-
-#### 故障排查
-
-1. [QUICKSTART.md](./QUICKSTART.md) - Troubleshooting部分
-2. [docs/development-sqlite.md](./docs/development-sqlite.md) - 常见问题
-3. Service READMEs - 各服务的故障排查
+| Service | Documentation | Purpose |
+|---------|---------------|---------|
+| Emotion | [Emotion System](./docs/emotion-system.md) | Emotion detection (rule + ML hybrid) |
+| Dialogue | [Dialogue System](./docs/dialogue-system.md) | Dialogue generation (template + LLM) |
+| Memory | [Memory Service](./docs/memory-service.md) | Memory management with vector search |
+| Analytics | [Analytics Dashboard](./docs/analytics-dashboard.md) | Usage tracking and cost monitoring |
 
 ---
 
-## 📊 文档地图
+## 🚀 Deployment
+
+### Deployment Options
+
+| Option | Guide | Cost | Difficulty |
+|--------|-------|------|-----------|
+| Local (Monolith) | [Monolith Guide](./QUICKSTART-MONOLITH.md) | $0 | ⭐ |
+| VPS | [Deployment Guide](./DEPLOYMENT.md#vps-deployment-simple) | $5-20/mo | ⭐⭐ |
+| PaaS (Railway/Render) | [Deployment Guide](./DEPLOYMENT.md#platform-as-a-service-paas) | $20-50/mo | ⭐⭐ |
+| Kubernetes | [K8s Guide](./docs/deployment-guide.md) | $200+/mo | ⭐⭐⭐⭐⭐ |
+
+### Operations
+
+- [Monitoring Setup](./docs/monitoring-setup.md) - Prometheus + Grafana
+- [Performance Optimization](./docs/performance-optimization.md) - Tuning guide
+- [Deployment Guide (Full)](./docs/deployment-guide.md) - Production deployment
+
+---
+
+## 🏗️ Architecture
+
+| Document | Audience | Content |
+|----------|----------|---------|
+| [CLAUDE.md](./CLAUDE.md) | Architects, Backend Devs | Complete technical architecture |
+| [Deployment Guide](./docs/deployment-guide.md) | DevOps | Production deployment & operations |
+
+---
+
+## 📖 By Role
+
+### Game Developers
+
+**Essential**:
+1. [Quick Start](./QUICKSTART-MONOLITH.md)
+2. [Unity SDK](./sdk/unity/README.md) / [Web SDK](./sdk/web/README.md) / [Unreal SDK](./sdk/unreal/README.md)
+3. [API Reference](./docs/api/README.md)
+
+**Optional**:
+- [Avatar SDK](./sdk/avatar/README.md) - Add 3D companions
+- [Vision SDK](./sdk/vision/README.md) - Screen analysis
+
+### Backend Developers
+
+**Essential**:
+1. [Architecture Guide](./CLAUDE.md)
+2. [SQLite Development](./docs/development-sqlite.md)
+3. [API Reference](./docs/api/README.md)
+
+**Deep Dive**:
+- [Emotion System](./docs/emotion-system.md)
+- [Dialogue System](./docs/dialogue-system.md)
+- [Memory Service](./docs/memory-service.md)
+
+### DevOps Engineers
+
+**Essential**:
+1. [Deployment Guide](./DEPLOYMENT.md)
+2. [Kubernetes Guide](./docs/deployment-guide.md)
+3. [Monitoring Setup](./docs/monitoring-setup.md)
+
+**Optimization**:
+- [Performance Tuning](./docs/performance-optimization.md)
+- [Database Comparison](./docs/database-comparison.md)
+
+---
+
+## 🎯 By Use Case
+
+### "I want to learn AGL"
+
+1. [README](./README.md) - Understand the project
+2. [Monolith Quick Start](./QUICKSTART-MONOLITH.md) - Start in 1 minute
+3. [Emotion System](./docs/emotion-system.md) - How emotions work
+4. [Dialogue System](./docs/dialogue-system.md) - How dialogue works
+
+### "I want to integrate AGL"
+
+1. Choose SDK: [Unity](./sdk/unity/) / [Web](./sdk/web/) / [Unreal](./sdk/unreal/)
+2. [Integration Guide](./docs/integration-guide.md)
+3. [API Reference](./docs/api/README.md)
+
+### "I want to deploy to production"
+
+1. [Deployment Options](./DEPLOYMENT.md) - Choose approach
+2. [Deployment Guide](./docs/deployment-guide.md) - Full K8s guide
+3. [Monitoring Setup](./docs/monitoring-setup.md) - Set up observability
+
+### "I want to add 3D avatars"
+
+1. [Avatar SDK](./sdk/avatar/README.md) - Main documentation
+2. [SDK Guide](./docs/sdk/avatar.md) - Detailed guide
+
+### "I want to optimize performance"
+
+1. [Performance Guide](./docs/performance-optimization.md)
+2. [Database Comparison](./docs/database-comparison.md)
+3. [Monitoring Setup](./docs/monitoring-setup.md)
+
+---
+
+## 📁 Documentation Map
 
 ```
 agl/
-├── README.md                           # 项目总览
-├── README.zh-CN.md                     # 中文总览
-├── QUICKSTART.md                       # 快速开始
-├── QUICKSTART-MONOLITH.md             # 最简单开始 🌟
-├── DEPLOYMENT-OPTIONS.md              # 部署选项对比
-├── CLAUDE.md                          # 完整架构文档
+├── README.md                          # Project overview
+├── QUICKSTART.md                      # Quick start guide
+├── QUICKSTART-MONOLITH.md            # Fastest start (1 min)
+├── DEPLOYMENT.md                      # Deployment options
+├── CLAUDE.md                          # Technical architecture
 │
 ├── docs/
-│   ├── development-sqlite.md          # SQLite开发 🌟
-│   ├── database-comparison.md         # 数据库对比
-│   ├── simplified-deployment.md       # 简化部署 🌟
+│   ├── development-sqlite.md          # SQLite development
+│   ├── database-comparison.md         # Database comparison
+│   ├── deployment-guide.md            # Production deployment
+│   ├── monitoring-setup.md            # Monitoring & alerts
+│   ├── performance-optimization.md    # Performance tuning
+│   ├── integration-guide.md           # Integration patterns
+│   ├── testing.md                     # Testing strategies
 │   │
-│   ├── emotion-system.md              # 情绪系统
-│   ├── dialogue-system.md             # 对话系统
-│   ├── memory-service.md              # 记忆服务
-│   ├── analytics-dashboard.md         # 分析仪表板
-│   ├── performance-optimization.md    # 性能优化
-│   ├── monitoring-setup.md            # 监控设置
-│   ├── integration-guide.md           # 集成指南
-│   ├── testing.md                     # 测试指南
+│   ├── emotion-system.md              # Emotion detection
+│   ├── dialogue-system.md             # Dialogue generation
+│   ├── memory-service.md              # Memory management
+│   ├── analytics-dashboard.md         # Analytics
 │   │
 │   ├── api/
-│   │   ├── README.md                  # API文档
+│   │   ├── README.md                  # REST API
 │   │   └── websocket.md               # WebSocket API
 │   │
-│   ├── sdk/
-│   │   ├── unity.md                   # Unity深度指南
-│   │   ├── avatar.md                  # Avatar SDK指南
-│   │   └── vision.md                  # Vision SDK指南
-│   │
-│   └── architecture/
-│       ├── system-overview.md         # 系统概览
-│       ├── development.md             # 开发环境
-│       └── deployment.md              # 生产部署
+│   └── sdk/
+│       ├── unity.md                   # Unity deep dive
+│       ├── avatar.md                  # Avatar SDK guide
+│       └── vision.md                  # Vision SDK guide
 │
 └── sdk/
     ├── unity/README.md                # Unity SDK
     ├── web/README.md                  # Web SDK
     ├── unreal/README.md               # Unreal SDK
-    ├── avatar/README.md               # Avatar SDK 🌟
-    └── vision/README.md               # Vision SDK 🌟
+    ├── avatar/README.md               # Avatar SDK
+    └── vision/README.md               # Vision SDK
 ```
 
 ---
 
-## 🔍 按角色查找
+## 🔍 Search by Keyword
 
-### 游戏开发者
-
-**主要文档**：
-1. [QUICKSTART-MONOLITH.md](./QUICKSTART-MONOLITH.md)
-2. [sdk/unity/README.md](./sdk/unity/README.md) 或你的平台
-3. [docs/api/README.md](./docs/api/README.md)
-4. [docs/integration-guide.md](./docs/integration-guide.md)
-
-**可选**：
-- [sdk/avatar/README.md](./sdk/avatar/README.md) - 3D形象
-- [sdk/vision/README.md](./sdk/vision/README.md) - 视觉AI
-
----
-
-### 后端开发者
-
-**主要文档**：
-1. [CLAUDE.md](./CLAUDE.md)
-2. [docs/architecture/system-overview.md](./docs/architecture/system-overview.md)
-3. [docs/development-sqlite.md](./docs/development-sqlite.md)
-4. [docs/api/README.md](./docs/api/README.md)
-
-**深入**：
-- [docs/emotion-system.md](./docs/emotion-system.md)
-- [docs/dialogue-system.md](./docs/dialogue-system.md)
-- [docs/memory-service.md](./docs/memory-service.md)
+| Looking for... | Keyword | Document |
+|----------------|---------|----------|
+| Getting started | quickstart | [QUICKSTART-MONOLITH.md](./QUICKSTART-MONOLITH.md) |
+| Local setup | sqlite, development | [development-sqlite.md](./docs/development-sqlite.md) |
+| Deployment | deploy, production | [DEPLOYMENT.md](./DEPLOYMENT.md) |
+| Unity | unity, c# | [sdk/unity/README.md](./sdk/unity/README.md) |
+| 3D avatars | avatar, 3d | [sdk/avatar/README.md](./sdk/avatar/README.md) |
+| Screen analysis | vision, ai | [sdk/vision/README.md](./sdk/vision/README.md) |
+| Emotions | emotion, detect | [emotion-system.md](./docs/emotion-system.md) |
+| Dialogue | dialogue, chat | [dialogue-system.md](./docs/dialogue-system.md) |
+| API | api, rest | [docs/api/README.md](./docs/api/README.md) |
+| Architecture | architecture, system | [CLAUDE.md](./CLAUDE.md) |
 
 ---
 
-### DevOps工程师
+## 📚 Learning Path
 
-**主要文档**：
-1. [DEPLOYMENT-OPTIONS.md](./DEPLOYMENT-OPTIONS.md)
-2. [docs/simplified-deployment.md](./docs/simplified-deployment.md)
-3. [docs/architecture/deployment.md](./docs/architecture/deployment.md)
-4. [docs/monitoring-setup.md](./docs/monitoring-setup.md)
+### Beginner (Week 1)
 
-**优化**：
-- [docs/performance-optimization.md](./docs/performance-optimization.md)
-- [docs/database-comparison.md](./docs/database-comparison.md)
+- [ ] Read [README.md](./README.md)
+- [ ] Follow [QUICKSTART-MONOLITH.md](./QUICKSTART-MONOLITH.md)
+- [ ] Test API endpoints
+- [ ] Read [Emotion System](./docs/emotion-system.md)
+- [ ] Read [Dialogue System](./docs/dialogue-system.md)
+- [ ] Integrate SDK for your platform
 
----
+### Intermediate (Week 2-3)
 
-### 产品经理
+- [ ] Read [Architecture Guide](./CLAUDE.md)
+- [ ] Understand microservices
+- [ ] Switch to PostgreSQL
+- [ ] Read [Performance Guide](./docs/performance-optimization.md)
+- [ ] Deploy to staging ([Deployment Guide](./DEPLOYMENT.md))
 
-**主要文档**：
-1. [README.md](./README.md)
-2. [DEPLOYMENT-OPTIONS.md](./DEPLOYMENT-OPTIONS.md)
-3. [docs/analytics-dashboard.md](./docs/analytics-dashboard.md)
+### Advanced (Month 1-2)
 
----
-
-## 📝 文档更新日志
-
-### 最新更新（2025-11）
-
-- ✅ 添加 Monolith服务文档
-- ✅ 添加 SQLite开发指南
-- ✅ 添加 数据库对比文档
-- ✅ 添加 Avatar SDK指南
-- ✅ 添加 Vision SDK指南
-- ✅ 更新 快速开始指南
-- ✅ 添加 简化部署指南
-- ✅ 添加 部署选项对比
-
-### 核心文档（稳定）
-
-- README.md
-- CLAUDE.md
-- docs/api/README.md
-- SDK READMEs
+- [ ] Deploy to Kubernetes
+- [ ] Set up monitoring ([Monitoring Guide](./docs/monitoring-setup.md))
+- [ ] Optimize performance
+- [ ] Deep dive into all services
+- [ ] Production operations
 
 ---
 
-## 🆘 找不到文档？
+## 🆘 Can't Find What You Need?
 
-### 搜索关键词
-
-| 你想找... | 搜索关键词 | 推荐文档 |
-|----------|-----------|---------|
-| 快速开始 | quickstart, start | QUICKSTART-MONOLITH.md |
-| SQLite | sqlite, database | development-sqlite.md |
-| 部署 | deploy, deployment | DEPLOYMENT-OPTIONS.md |
-| Unity | unity, c#, sdk | sdk/unity/README.md |
-| 3D形象 | avatar, 3d, render | sdk/avatar/README.md |
-| 视觉AI | vision, screen, ai | sdk/vision/README.md |
-| 情绪 | emotion, detect | emotion-system.md |
-| 对话 | dialogue, chat | dialogue-system.md |
-| API | api, rest, http | docs/api/README.md |
-| 架构 | architecture, system | CLAUDE.md |
-
-### 仍然找不到？
-
-1. 查看项目根目录的 `README.md`
-2. 浏览 `docs/` 目录
-3. 查看对应SDK的 `README.md`
-4. 提交 [GitHub Issue](https://github.com/yourusername/agl/issues)
+1. Check the [README.md](./README.md) for overview
+2. Browse the [docs/](./docs) directory
+3. Check SDK-specific [README files](./sdk/)
+4. [Open an Issue](https://github.com/J0hnFFFF/agl/issues) on GitHub
 
 ---
 
-## 🎓 学习路径
-
-### 初级（1周）
-
-Day 1-2:
-- [ ] README.md
-- [ ] QUICKSTART-MONOLITH.md
-- [ ] 运行Monolith服务
-- [ ] 测试API
-
-Day 3-4:
-- [ ] docs/emotion-system.md
-- [ ] docs/dialogue-system.md
-- [ ] 集成Unity SDK（或你的平台）
-
-Day 5-7:
-- [ ] docs/memory-service.md
-- [ ] sdk/avatar/README.md（可选）
-- [ ] 构建简单demo
-
-### 中级（2-3周）
-
-Week 2:
-- [ ] CLAUDE.md
-- [ ] docs/architecture/system-overview.md
-- [ ] docs/api/README.md
-- [ ] 理解微服务架构
-
-Week 3:
-- [ ] docs/database-comparison.md
-- [ ] docs/performance-optimization.md
-- [ ] 切换到PostgreSQL
-- [ ] 性能调优
-
-Week 4:
-- [ ] DEPLOYMENT-OPTIONS.md
-- [ ] docs/simplified-deployment.md
-- [ ] 部署到Railway/VPS
-
-### 高级（1-2月）
-
-Month 1:
-- [ ] docs/architecture/deployment.md
-- [ ] docs/monitoring-setup.md
-- [ ] K8s部署
-- [ ] 监控配置
-
-Month 2:
-- [ ] 所有service文档
-- [ ] 深度定制
-- [ ] 性能优化
-- [ ] 生产运维
-
----
-
-**快速导航回到顶部** ⬆️
+**Quick Links**: [Home](./README.md) • [Get Started](./QUICKSTART.md) • [Deploy](./DEPLOYMENT.md) • [API Docs](./docs/api/README.md)

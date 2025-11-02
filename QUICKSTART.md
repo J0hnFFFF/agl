@@ -1,156 +1,163 @@
-# AGL Platform - Quick Start Guide
+# 🚀 Quick Start Guide
 
-**Get started with AGL in under 5 minutes!**
-
-Choose your preferred setup method based on your needs.
+Get started with AGL in under 5 minutes! Choose the setup method that best fits your needs.
 
 ---
 
-## 🚀 Option 1: Simplified Start (Recommended)
+## 📋 Choose Your Path
 
-**Perfect for: Learning, Development, Small Projects**
+| Method | Best For | Time | Requirements |
+|--------|----------|------|--------------|
+| [Monolith Mode](#-option-1-monolith-mode-recommended) | First-time users, quick testing | 1 min | Node.js only |
+| [Microservices Mode](#-option-2-microservices-mode) | Production-like development | 5 min | Node.js, Python, Docker |
 
-### What You Need
+---
+
+## 🎯 Option 1: Monolith Mode (Recommended)
+
+**Perfect for**: Learning, prototyping, and small projects
+
+### Prerequisites
 - Node.js 20+
-- That's it! No Docker, PostgreSQL, or Redis required.
+- That's it! No Docker, PostgreSQL, or Redis needed.
 
-### Start in 1 Minute
+### Start in 60 Seconds
 
 ```bash
 # 1. Clone repository
-git clone <repository-url>
+git clone https://github.com/J0hnFFFF/agl.git
 cd agl
 
-# 2. Start everything with one command!
+# 2. Start everything!
 npm run dev:monolith
 ```
 
-**Done!** The service is running at `http://localhost:3000`
+**Done!** 🎉 Service is now running at `http://localhost:3000`
 
-#### What's Included
-- ✅ Complete HTTP API
-- ✅ WebSocket realtime communication
-- ✅ SQLite database (single file)
-- ✅ In-memory cache
-- ✅ Emotion analysis
-- ✅ Dialogue generation
-- ✅ Memory management
+### What You Get
+- ✅ Complete HTTP REST API
+- ✅ WebSocket real-time communication
+- ✅ SQLite database (zero configuration)
+- ✅ In-memory caching
+- ✅ All core features (emotion, dialogue, memory)
 
-#### Test It
+### Quick Test
 
 ```bash
-# Analyze emotion
+# Test emotion analysis
 curl -X POST http://localhost:3000/api/emotion/analyze \
   -H "Content-Type: application/json" \
-  -d '{
-    "eventType": "player.victory",
-    "data": {"killCount": 15, "mvp": true}
-  }'
+  -d '{"eventType": "player.victory", "data": {"killCount": 15, "mvp": true}}'
 
-# Generate dialogue
+# Test dialogue generation
 curl -X POST http://localhost:3000/api/dialogue/generate \
   -H "Content-Type: application/json" \
-  -d '{
-    "emotion": "excited",
-    "persona": "cheerful",
-    "language": "zh"
-  }'
+  -d '{"emotion": "excited", "persona": "cheerful", "language": "en"}'
 ```
 
-**Next Steps:**
-- See [Monolith Quick Start](./QUICKSTART-MONOLITH.md) for detailed guide
-- Read [SQLite Development Guide](./docs/development-sqlite.md)
+**Next Steps**: See [Monolith Guide](./QUICKSTART-MONOLITH.md) for more details.
 
 ---
 
-## 🏗️ Option 2: Full Microservices (Advanced)
+## 🏗️ Option 2: Microservices Mode
 
-**Perfect for: Production-like Development, Learning Architecture**
+**Perfect for**: Production-like development, learning the architecture
 
-### What You Need
+### Prerequisites
 - Node.js 20+
 - Python 3.11+
 - Docker & Docker Compose
 
-### Start in 5 Minutes
-
-#### 1. Clone and Configure
+### Step 1: Clone and Configure
 
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/J0hnFFFF/agl.git
 cd agl
 
 # Create environment file
 cp .env.example .env
 ```
 
-#### 2. Choose Your Database
+### Step 2: Add API Keys
 
-**Option A: SQLite (Simpler)**
-
-Edit `.env`:
-```bash
-DATABASE_PROVIDER=sqlite
-DATABASE_URL=file:./dev.db
-# No Docker needed!
-```
-
-**Option B: PostgreSQL (Production-like)**
+Edit `.env` and add your API keys:
 
 ```bash
-# Start databases
-npm run dev:stack
+# Required for LLM features
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
 
-# Edit .env
+# Database (PostgreSQL recommended)
 DATABASE_PROVIDER=postgresql
 DATABASE_URL=postgresql://agl_user:agl_password_dev@localhost:5432/agl_dev
 REDIS_URL=redis://localhost:6379
 QDRANT_URL=http://localhost:6333
 ```
 
-#### 3. Initialize Database
+**💡 Tip**: You can also use SQLite for testing:
+```bash
+DATABASE_PROVIDER=sqlite
+DATABASE_URL=file:./dev.db
+```
+
+### Step 3: Start Infrastructure
 
 ```bash
+# Start PostgreSQL, Redis, and Qdrant
+npm run dev:stack
+
+# Wait for services to be ready (~30 seconds)
+docker-compose ps
+```
+
+### Step 4: Initialize Database
+
+```bash
+# Install dependencies
+npm install
+
+# Setup database
 cd services/api-service
 npx prisma generate
 npx prisma migrate dev --name init
 cd ../..
 ```
 
-#### 4. Start Services
+### Step 5: Start Services
 
-**For SQLite:**
+Open **5 separate terminals** and run:
+
 ```bash
-# Terminal 1 - API Service
+# Terminal 1 - API Service (Port 3000)
 npm run dev:api
 
-# Terminal 2 - Realtime Gateway
+# Terminal 2 - Realtime Gateway (Port 3001)
 npm run dev:realtime
 
-# Terminal 3 - Emotion Service
+# Terminal 3 - Emotion Service (Port 8000)
 npm run dev:emotion
 
-# Terminal 4 - Dialogue Service
+# Terminal 4 - Dialogue Service (Port 8001)
 npm run dev:dialogue
 
-# Terminal 5 - Memory Service
+# Terminal 5 - Memory Service (Port 3002)
 npm run dev:memory
 ```
 
-**For PostgreSQL:**
-Same as above, but Docker containers will provide databases.
+### Services Available
 
-#### Services Available
-- API Service: `http://localhost:3000`
-- Realtime Gateway: `ws://localhost:3001`
-- Emotion Service: `http://localhost:8000`
-- Dialogue Service: `http://localhost:8001`
-- Memory Service: `http://localhost:3002`
+| Service | URL | Purpose |
+|---------|-----|---------|
+| API Service | http://localhost:3000 | Main REST API |
+| Realtime Gateway | ws://localhost:3001 | WebSocket events |
+| Emotion Service | http://localhost:8000 | Emotion analysis |
+| Dialogue Service | http://localhost:8001 | Dialogue generation |
+| Memory Service | http://localhost:3002 | Memory management |
 
 ---
 
-## 📚 API Examples
+## 🎮 Your First Integration
 
 ### Create a Game
 
@@ -158,10 +165,19 @@ Same as above, but Docker containers will provide databases.
 curl -X POST http://localhost:3000/api/games \
   -H "Content-Type: application/json" \
   -d '{
-    "clientId": "client_123",
+    "clientId": "demo_client",
     "name": "My Awesome Game",
-    "description": "An epic battle royale"
+    "description": "An epic adventure"
   }'
+```
+
+Response:
+```json
+{
+  "id": "game_abc123",
+  "name": "My Awesome Game",
+  "clientId": "demo_client"
+}
 ```
 
 ### Create a Player
@@ -170,8 +186,8 @@ curl -X POST http://localhost:3000/api/games \
 curl -X POST http://localhost:3000/api/players \
   -H "Content-Type: application/json" \
   -d '{
-    "gameId": "game_123",
-    "externalId": "player_abc",
+    "gameId": "game_abc123",
+    "externalId": "player_001",
     "characterPersona": "cheerful"
   }'
 ```
@@ -185,12 +201,13 @@ curl -X POST http://localhost:3000/api/emotion/analyze \
     "eventType": "player.victory",
     "data": {
       "killCount": 15,
-      "mvp": true
+      "mvp": true,
+      "winStreak": 3
     }
   }'
 ```
 
-**Response:**
+Response:
 ```json
 {
   "emotion": "excited",
@@ -209,46 +226,50 @@ curl -X POST http://localhost:3000/api/dialogue/generate \
   -H "Content-Type: application/json" \
   -d '{
     "emotion": "excited",
-    "context": {},
+    "context": {
+      "eventType": "player.victory",
+      "killCount": 15
+    },
     "persona": "cheerful",
-    "language": "zh"
+    "language": "en"
   }'
 ```
 
-**Response:**
+Response:
 ```json
 {
-  "dialogue": "太棒了！你真厉害！",
+  "dialogue": "Incredible! You're unstoppable today!",
   "emotion": "excited",
   "source": "template",
   "persona": "cheerful",
+  "language": "en",
   "cached": false
 }
 ```
 
-### Store Memory
+### Store a Memory
 
 ```bash
 curl -X POST http://localhost:3000/api/memory/store \
   -H "Content-Type: application/json" \
   -d '{
-    "playerId": "player_123",
+    "playerId": "player_001",
     "type": "achievement",
-    "content": "首次获得15连杀",
+    "content": "First time getting 15 kills in a single match!",
     "emotion": "excited",
     "importance": 0.9
   }'
 ```
 
-### Search Memories
+### Retrieve Memories
 
 ```bash
-curl "http://localhost:3000/api/memory/search?playerId=player_123&limit=10"
+curl "http://localhost:3000/api/memory/search?playerId=player_001&limit=5"
 ```
 
 ---
 
-## 🎮 SDK Integration
+## 🎨 SDK Integration Examples
 
 ### Unity (C#)
 
@@ -256,32 +277,34 @@ curl "http://localhost:3000/api/memory/search?playerId=player_123&limit=10"
 using AGL;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class CompanionManager : MonoBehaviour
 {
-    private AGLClient aglClient;
+    private AGLClient client;
 
     void Start()
     {
-        aglClient = new AGLClient(new AGLConfig
+        // Initialize AGL client
+        client = new AGLClient(new AGLConfig
         {
             ApiUrl = "http://localhost:3000",
             WebSocketUrl = "ws://localhost:3000"
         });
 
         // Listen for companion actions
-        aglClient.OnCompanionAction += HandleCompanionAction;
+        client.OnCompanionAction += HandleAction;
     }
 
-    void OnPlayerVictory(int killCount, bool isMVP)
+    void OnPlayerVictory(int kills, bool isMVP)
     {
-        aglClient.SendGameEvent("player.victory", new
+        // Send game event
+        client.SendGameEvent("player.victory", new
         {
-            killCount = killCount,
+            killCount = kills,
             mvp = isMVP
         });
     }
 
-    void HandleCompanionAction(CompanionAction action)
+    void HandleAction(CompanionAction action)
     {
         Debug.Log($"Emotion: {action.Emotion}");
         Debug.Log($"Dialogue: {action.Dialogue}");
@@ -293,27 +316,24 @@ public class GameManager : MonoBehaviour
 }
 ```
 
-**See:** [Unity SDK Guide](./sdk/unity/README.md)
-
----
+📖 [Unity SDK Documentation](./sdk/unity/README.md)
 
 ### Web / TypeScript
 
 ```typescript
 import { io } from 'socket.io-client';
 
-// Connect to WebSocket
+// Connect to AGL
 const socket = io('http://localhost:3000');
 
 // Join player room
-socket.emit('join', { playerId: 'player_123' });
+socket.emit('join', { playerId: 'player_001' });
 
 // Send game event
 socket.emit('game_event', {
-  playerId: 'player_123',
+  playerId: 'player_001',
   eventType: 'player.victory',
-  data: { killCount: 15, mvp: true },
-  context: {}
+  data: { killCount: 15, mvp: true }
 });
 
 // Listen for companion actions
@@ -321,206 +341,112 @@ socket.on('companion_action', (action) => {
   console.log('Emotion:', action.emotion);
   console.log('Dialogue:', action.dialogue);
 
-  // Update UI
-  updateDialogue(action.dialogue);
-  playAnimation(action.action);
+  updateUI(action);
 });
 ```
 
-**See:** [Web SDK Guide](./sdk/web/README.md)
-
----
+📖 [Web SDK Documentation](./sdk/web/README.md)
 
 ### Unreal Engine (C++)
 
 ```cpp
-// Initialize in GameMode or GameInstance
-UAGLClient* AGLClient = NewObject<UAGLClient>();
+#include "AGLClient.h"
 
-FAGLConfig Config;
-Config.ApiUrl = TEXT("http://localhost:3000");
-Config.WebSocketUrl = TEXT("ws://localhost:3000");
-
-AGLClient->Initialize(Config);
-AGLClient->SetPlayerId(TEXT("player_123"));
-
-// Send game event
-FAGLGameEvent Event;
-Event.EventType = TEXT("player.victory");
-Event.Data.Add(TEXT("killCount"), TEXT("15"));
-Event.Data.Add(TEXT("mvp"), TEXT("true"));
-
-FOnGameEventComplete OnComplete;
-OnComplete.BindLambda([](bool bSuccess, const FAGLCompanionAction& Action)
+void AMyGameMode::BeginPlay()
 {
-    if (bSuccess)
+    Super::BeginPlay();
+
+    // Initialize AGL client
+    AGLClient = NewObject<UAGLClient>();
+
+    FAGLConfig Config;
+    Config.ApiUrl = TEXT("http://localhost:3000");
+    AGLClient->Initialize(Config);
+}
+
+void AMyGameMode::OnPlayerVictory(int32 KillCount, bool bIsMVP)
+{
+    // Create game event
+    FAGLGameEvent Event;
+    Event.EventType = TEXT("player.victory");
+    Event.Data.Add(TEXT("killCount"), FString::FromInt(KillCount));
+    Event.Data.Add(TEXT("mvp"), bIsMVP ? TEXT("true") : TEXT("false"));
+
+    // Send event
+    FOnGameEventComplete Callback;
+    Callback.BindLambda([](bool bSuccess, const FAGLCompanionAction& Action)
     {
-        UE_LOG(LogTemp, Log, TEXT("Emotion: %s"), *Action.Emotion);
-        UE_LOG(LogTemp, Log, TEXT("Dialogue: %s"), *Action.Dialogue);
-    }
-});
-
-AGLClient->SendGameEvent(Event, OnComplete);
-```
-
-**See:** [Unreal SDK Guide](./sdk/unreal/README.md)
-
----
-
-## 🎨 3D Avatar Integration
-
-### Use Avatar SDK
-
-```tsx
-import { AvatarController } from '@agl/avatar';
-import { io } from 'socket.io-client';
-import { useState, useEffect } from 'react';
-
-function Companion() {
-  const [emotion, setEmotion] = useState('neutral');
-  const [dialogue, setDialogue] = useState('');
-
-  useEffect(() => {
-    const socket = io('http://localhost:3000');
-
-    socket.on('companion_action', (action) => {
-      setEmotion(action.emotion);
-      setDialogue(action.dialogue);
+        if (bSuccess)
+        {
+            UE_LOG(LogTemp, Log, TEXT("Dialogue: %s"), *Action.Dialogue);
+        }
     });
 
-    return () => socket.disconnect();
-  }, []);
-
-  return (
-    <AvatarController
-      config={{
-        customization: {
-          modelSource: {
-            type: 'gltf',
-            url: '/models/companion.gltf'
-          }
-        },
-        initialEmotion: emotion,
-        enableAnimations: true
-      }}
-      dialogueText={dialogue}
-      bubbleConfig={{
-        enabled: true,
-        position: 'top',
-        maxWidth: 300
-      }}
-    />
-  );
+    AGLClient->SendGameEvent(Event, Callback);
 }
 ```
 
-**See:** [Avatar SDK Guide](./sdk/avatar/README.md)
+📖 [Unreal SDK Documentation](./sdk/unreal/README.md)
 
 ---
 
-## 👁️ Vision AI Integration
-
-### Analyze Game Screen
-
-```typescript
-import { ScreenCapture, VisionAnalyzer, GameStateRecognizer } from '@agl/vision';
-
-// Setup screen capture
-const capture = new ScreenCapture({
-  source: 'canvas',
-  target: '#game-canvas',
-  format: 'jpeg',
-  quality: 0.8
-});
-
-// Setup vision analyzer
-const analyzer = new VisionAnalyzer({
-  provider: 'openai-gpt4v',
-  apiKey: process.env.OPENAI_API_KEY
-});
-
-// Setup game state recognizer
-const recognizer = new GameStateRecognizer(analyzer);
-
-// Analyze periodically
-setInterval(async () => {
-  const screenshot = await capture.capture();
-  const gameState = await recognizer.recognize(screenshot);
-
-  if (gameState.category === 'combat') {
-    // React to combat state
-    emotionService.setEmotion('confident', 0.8);
-  }
-}, 3000);
-```
-
-**See:** [Vision SDK Guide](./sdk/vision/README.md)
-
----
-
-## 🗄️ Database Management
+## 🛠️ Development Tools
 
 ### View Database
 
-**SQLite (Monolith/SQLite mode):**
+**Monolith / SQLite:**
 ```bash
-# Using Prisma Studio
 cd services/api-service
 npx prisma studio
-
-# Using sqlite3 CLI
-sqlite3 services/api-service/dev.db
-.tables
-SELECT * FROM players;
+# Opens browser at http://localhost:5555
 ```
 
-**PostgreSQL (Full stack):**
-```bash
-# Using Prisma Studio
-cd services/api-service
-npx prisma studio
+**Microservices / PostgreSQL:**
+- Prisma Studio: `npx prisma studio` (in api-service directory)
+- pgAdmin: http://localhost:5050 (login: admin@agl.dev / admin)
 
-# Using psql
-docker-compose exec postgres psql -U agl_user -d agl_dev
-\dt
-SELECT * FROM players;
+### View Cache (Redis)
+
+```bash
+# Redis Commander (if using microservices)
+open http://localhost:8081
 ```
 
-### Backup Database
+### Monitor Logs
 
-**SQLite:**
 ```bash
-cp services/api-service/dev.db backup/dev.db.$(date +%Y%m%d)
-```
+# Monolith
+npm run dev:monolith
 
-**PostgreSQL:**
-```bash
-docker-compose exec postgres pg_dump -U agl_user agl_dev > backup/agl.sql
+# Microservices - check individual terminals
+# Or use Docker logs
+docker-compose logs -f postgres
+docker-compose logs -f redis
 ```
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Monolith won't start
+### Port Already in Use
 
 ```bash
-# Check if port is in use
-netstat -an | grep 3000
+# Check what's using port 3000
+netstat -ano | findstr :3000  # Windows
+lsof -i :3000                 # Mac/Linux
 
-# Check logs
-cd services/monolith
-npm run dev  # Watch for errors
+# Kill the process or change port in .env
+API_SERVICE_PORT=3001
 ```
 
-### Database connection issues
+### Database Connection Failed
 
 **SQLite:**
 ```bash
-# Check if file exists
+# Check if database file exists
 ls -la services/api-service/dev.db
 
-# Recreate database
+# Reset database
 cd services/api-service
 rm dev.db
 npx prisma migrate dev
@@ -538,98 +464,100 @@ docker-compose restart postgres
 docker-compose logs postgres
 ```
 
-### High memory usage
+### Python Service Won't Start
 
 ```bash
-# Check process memory
-npm run dev:monolith &
-ps aux | grep node
+# Install Python dependencies
+cd services/emotion-service
+pip install -r requirements.txt
 
-# For Docker
-docker stats
+cd ../dialogue-service
+pip install -r requirements.txt
 ```
 
-### Slow responses
+### Missing API Keys
 
-- Check cache hit rate: `curl http://localhost:3000/api/emotion/stats`
-- Enable debug logging: `LOG_LEVEL=debug npm run dev:monolith`
-- Monitor database: `npx prisma studio`
+```bash
+# Check .env file
+cat .env | grep API_KEY
+
+# Add missing keys
+echo "ANTHROPIC_API_KEY=sk-ant-..." >> .env
+echo "OPENAI_API_KEY=sk-..." >> .env
+```
+
+### High Memory Usage
+
+```bash
+# Check memory usage
+docker stats  # For Docker services
+
+# Reduce memory by using SQLite
+# Edit .env:
+DATABASE_PROVIDER=sqlite
+DATABASE_URL=file:./dev.db
+```
 
 ---
 
-## 📊 Deployment Options
+## 📊 Health Checks
 
-Ready to deploy? Choose your deployment strategy:
+```bash
+# API Service
+curl http://localhost:3000/health
 
-| Deployment | Best For | Cost | Setup Time |
-|-----------|----------|------|-----------|
-| [Monolith on VPS](./docs/simplified-deployment.md) | Small apps | $5/mo | 10 min |
-| [Railway](./docs/simplified-deployment.md) | Quick deploy | $20/mo | 5 min |
-| [Serverless](./docs/simplified-deployment.md) | Auto-scale | $50/mo | 15 min |
-| [Kubernetes](./docs/architecture/deployment.md) | Enterprise | $200/mo | 1 hour |
+# Emotion Service
+curl http://localhost:8000/health
 
-**See:** [Deployment Options Guide](./DEPLOYMENT-OPTIONS.md)
+# Dialogue Service
+curl http://localhost:8001/health
 
----
-
-## 📚 Documentation
-
-### Getting Started
-- [Monolith Quick Start](./QUICKSTART-MONOLITH.md) - Fastest way to start
-- [SQLite Development](./docs/development-sqlite.md) - Local development guide
-- [Database Comparison](./docs/database-comparison.md) - SQLite vs PostgreSQL
-
-### Platform Docs
-- [Architecture Overview](./CLAUDE.md) - System design
-- [API Documentation](./docs/api/README.md) - REST API reference
-- [Deployment Guide](./docs/architecture/deployment.md) - Production deployment
-- [Monitoring Setup](./docs/monitoring-setup.md) - Metrics & alerts
-
-### SDK Guides
-- [Unity SDK](./sdk/unity/README.md) - C# integration
-- [Web SDK](./sdk/web/README.md) - TypeScript/JavaScript
-- [Unreal SDK](./sdk/unreal/README.md) - C++ integration
-- [Avatar SDK](./sdk/avatar/README.md) - 3D rendering engine
-- [Vision SDK](./sdk/vision/README.md) - AI screen analysis
-
-### Service Guides
-- [Emotion System](./docs/emotion-system.md) - Emotion detection
-- [Dialogue System](./docs/dialogue-system.md) - Dialogue generation
-- [Memory Service](./docs/memory-service.md) - Memory management
-- [Analytics Dashboard](./docs/analytics-dashboard.md) - Usage tracking
+# Memory Service
+curl http://localhost:3002/health
+```
 
 ---
 
 ## 🎯 Next Steps
 
-### 1. Learn the Basics
-- Try the API examples above
-- Explore emotion analysis and dialogue generation
-- Understand memory storage
+### 1. Explore Features
+- Try different event types: `player.death`, `player.achievement`, `game.start`
+- Test different emotions: `excited`, `sad`, `frustrated`, `confident`
+- Experiment with personas: `cheerful`, `serious`, `playful`
+- Try different languages: `en`, `zh`, `ja`
 
 ### 2. Integrate with Your Game
-- Choose your SDK (Unity/Web/Unreal)
+- Choose your SDK (Unity / Web / Unreal)
 - Follow the integration guide
-- Test with your game events
+- Test with real game events
 
-### 3. Add Advanced Features
-- Integrate Avatar SDK for 3D companions
-- Add Vision SDK for screen analysis
-- Customize dialogue templates
+### 3. Advanced Features
+- [3D Avatar SDK](./sdk/avatar/README.md) - Add animated 3D companions
+- [Vision AI SDK](./sdk/vision/README.md) - Analyze game screens
+- [Memory System](./docs/memory-service.md) - Build long-term relationships
 
 ### 4. Deploy to Production
-- Choose deployment option
-- Configure production environment
-- Set up monitoring
+- [Deployment Guide](./DEPLOYMENT.md) - Production deployment options
+- [Monitoring Setup](./docs/monitoring-setup.md) - Set up alerts and dashboards
+- [Performance Tuning](./docs/performance-optimization.md) - Optimize for scale
 
 ---
 
-## 💬 Support
+## 📚 Documentation
 
-- **Documentation**: Browse `docs/` directory
-- **Issues**: [GitHub Issues](https://github.com/yourusername/agl/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/agl/discussions)
+- [Main README](./README.md) - Project overview
+- [Architecture Guide](./CLAUDE.md) - Technical architecture
+- [API Reference](./docs/api/README.md) - Complete API documentation
+- [Testing Guide](./docs/testing.md) - Testing strategies
 
 ---
 
-**You're all set! Start building amazing AI game companions! 🎮✨**
+## 💬 Need Help?
+
+- **Issues**: [GitHub Issues](https://github.com/J0hnFFFF/agl/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/J0hnFFFF/agl/discussions)
+- **Documentation**: Browse the [docs/](./docs) directory
+
+---
+
+**Happy building! 🎮✨**

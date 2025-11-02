@@ -1,65 +1,76 @@
-# AGL快速开始 - 单体版本
+# 🚀 Monolith Mode - Quick Start
 
-**5分钟启动完整的AGL服务！**
+**The fastest way to start with AGL - no Docker, no complex setup, just Node.js!**
 
-这是AGL平台的简化版本，所有功能都整合在一个进程中，使用SQLite数据库。非常适合：
-
-- ✅ 本地开发和测试
-- ✅ MVP和原型验证
-- ✅ 小规模部署（<10K用户）
-- ✅ 学习和体验AGL功能
+Perfect for: first-time users, learning, prototyping, and small projects.
 
 ---
 
-## 🚀 快速启动
+## 🎯 What is Monolith Mode?
 
-### 方法1：一键启动（推荐）
+Monolith Mode is a **single-service deployment** that includes all AGL features:
+
+- ✅ **All-in-one**: API, WebSocket, Emotion, Dialogue, and Memory services
+- ✅ **Zero config**: SQLite database, in-memory cache
+- ✅ **One command**: Start everything with `npm run dev:monolith`
+- ✅ **Full features**: All core AGL capabilities included
+
+### Monolith vs Microservices
+
+| Feature | Monolith | Microservices |
+|---------|----------|---------------|
+| Setup time | 1 minute | 5-10 minutes |
+| Dependencies | Node.js only | Node.js, Python, Docker |
+| Database | SQLite (file-based) | PostgreSQL + Redis + Qdrant |
+| Services | 1 process | 5+ processes |
+| Best for | Development, testing | Production, learning architecture |
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+
+- **Node.js 20+** (check with `node --version`)
+- That's it!
+
+### Start in 60 Seconds
 
 ```bash
-# 克隆仓库
-git clone <repository-url>
+# 1. Clone repository
+git clone https://github.com/J0hnFFFF/agl.git
 cd agl
 
-# 一键启动！
+# 2. Start monolith
 npm run dev:monolith
 ```
 
-就这么简单！服务将在 `http://localhost:3000` 启动。
+**Done!** 🎉
 
-### 方法2：手动启动
-
-```bash
-cd services/monolith
-
-# 安装依赖
-npm install
-
-# 启动服务
-npm run dev
-```
+The service will:
+1. Auto-install dependencies (first run only)
+2. Initialize SQLite database
+3. Start on `http://localhost:3000`
 
 ---
 
-## ✅ 验证服务
+## 🧪 Test Your Installation
 
-### 1. 检查健康状态
+### Health Check
 
 ```bash
 curl http://localhost:3000/health
 ```
 
-**期望输出**:
+Response:
 ```json
 {
   "status": "ok",
-  "service": "AGL Monolith",
-  "version": "1.0.0",
-  "database": "SQLite",
-  "cache": "In-Memory"
+  "timestamp": "2024-01-15T10:30:00.000Z"
 }
 ```
 
-### 2. 测试情绪分析
+### Test Emotion Analysis
 
 ```bash
 curl -X POST http://localhost:3000/api/emotion/analyze \
@@ -73,7 +84,7 @@ curl -X POST http://localhost:3000/api/emotion/analyze \
   }'
 ```
 
-**期望输出**:
+Expected response:
 ```json
 {
   "emotion": "excited",
@@ -85,7 +96,7 @@ curl -X POST http://localhost:3000/api/emotion/analyze \
 }
 ```
 
-### 3. 测试对话生成
+### Test Dialogue Generation
 
 ```bash
 curl -X POST http://localhost:3000/api/dialogue/generate \
@@ -93,314 +104,522 @@ curl -X POST http://localhost:3000/api/dialogue/generate \
   -d '{
     "emotion": "excited",
     "persona": "cheerful",
-    "language": "zh"
+    "language": "en"
   }'
 ```
 
-**期望输出**:
+Expected response:
 ```json
 {
-  "dialogue": "太棒了！你真厉害！",
+  "dialogue": "Incredible! You're on fire!",
   "emotion": "excited",
   "source": "template",
-  "persona": "cheerful"
+  "persona": "cheerful",
+  "language": "en"
 }
 ```
 
----
-
-## 📱 Unity集成示例
-
-### 1. 安装Unity SDK
-
-将 `sdk/unity/` 文件夹导入Unity项目。
-
-### 2. 配置AGL
-
-```csharp
-using AGL;
-using UnityEngine;
-
-public class GameManager : MonoBehaviour
-{
-    private AGLClient aglClient;
-
-    void Start()
-    {
-        // 连接到Monolith服务
-        aglClient = new AGLClient(new AGLConfig
-        {
-            ApiUrl = "http://localhost:3000",
-            WebSocketUrl = "ws://localhost:3000"
-        });
-
-        // 监听伴侣动作
-        aglClient.OnCompanionAction += HandleCompanionAction;
-    }
-
-    void OnPlayerVictory(int killCount, bool isMVP)
-    {
-        // 发送游戏事件
-        aglClient.SendGameEvent("player.victory", new
-        {
-            killCount = killCount,
-            mvp = isMVP
-        });
-    }
-
-    void HandleCompanionAction(CompanionAction action)
-    {
-        Debug.Log($"Emotion: {action.Emotion}");
-        Debug.Log($"Dialogue: {action.Dialogue}");
-
-        // 更新UI显示对话
-        dialogueText.text = action.Dialogue;
-
-        // 播放对应动画
-        animator.SetTrigger(action.Action);
-    }
-}
-```
-
----
-
-## 🎮 Web集成示例
-
-### 1. 安装Web SDK
+### Test Memory Storage
 
 ```bash
-npm install @agl/web-sdk socket.io-client
+# Store a memory
+curl -X POST http://localhost:3000/api/memory/store \
+  -H "Content-Type: application/json" \
+  -d '{
+    "playerId": "test_player",
+    "type": "achievement",
+    "content": "First victory with 15 kills!",
+    "emotion": "excited",
+    "importance": 0.9
+  }'
+
+# Retrieve memories
+curl "http://localhost:3000/api/memory/search?playerId=test_player&limit=5"
 ```
 
-### 2. 基础集成
+---
 
-```typescript
-import { AGLClient } from '@agl/web-sdk';
-import { io } from 'socket.io-client';
+## 🎮 Complete Example: Game Integration
 
-// 创建客户端
-const client = new AGLClient({
-  apiUrl: 'http://localhost:3000',
-  socketUrl: 'http://localhost:3000'
-});
+### 1. Create a Game
 
-// 连接WebSocket
+```bash
+curl -X POST http://localhost:3000/api/games \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clientId": "my_game_studio",
+    "name": "Battle Arena Pro",
+    "description": "An epic battle royale game"
+  }'
+```
+
+Save the returned `id` (e.g., `game_abc123`)
+
+### 2. Create a Player
+
+```bash
+curl -X POST http://localhost:3000/api/players \
+  -H "Content-Type: application/json" \
+  -d '{
+    "gameId": "game_abc123",
+    "externalId": "player_001",
+    "characterPersona": "cheerful"
+  }'
+```
+
+### 3. Send Game Events
+
+```bash
+# Player wins a match
+curl -X POST http://localhost:3000/api/emotion/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventType": "player.victory",
+    "data": {
+      "killCount": 15,
+      "mvp": true,
+      "matchDuration": 1200
+    }
+  }'
+
+# Player dies
+curl -X POST http://localhost:3000/api/emotion/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventType": "player.death",
+    "data": {
+      "deathCount": 3,
+      "killedBy": "enemy_sniper"
+    }
+  }'
+
+# Player achieves milestone
+curl -X POST http://localhost:3000/api/emotion/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventType": "player.achievement",
+    "data": {
+      "achievementId": "first_blood",
+      "rarity": "legendary"
+    }
+  }'
+```
+
+### 4. Generate Context-Aware Dialogue
+
+```bash
+curl -X POST http://localhost:3000/api/dialogue/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "emotion": "excited",
+    "context": {
+      "eventType": "player.victory",
+      "killCount": 15,
+      "mvp": true
+    },
+    "persona": "cheerful",
+    "language": "en"
+  }'
+```
+
+---
+
+## 🌐 WebSocket Integration
+
+### Connect and Listen for Events
+
+```javascript
+const io = require('socket.io-client');
+
+// Connect to monolith WebSocket
 const socket = io('http://localhost:3000');
 
-// 监听伴侣动作
+// Join player room
+socket.emit('join', { playerId: 'player_001' });
+
+// Send game event
+socket.emit('game_event', {
+  playerId: 'player_001',
+  eventType: 'player.victory',
+  data: {
+    killCount: 15,
+    mvp: true
+  },
+  context: {}
+});
+
+// Listen for companion reactions
 socket.on('companion_action', (action) => {
   console.log('Emotion:', action.emotion);
   console.log('Dialogue:', action.dialogue);
-
-  // 更新UI
-  updateDialogue(action.dialogue);
-  playAnimation(action.action);
+  console.log('Action:', action.action);
 });
 
-// 发送游戏事件
-async function onPlayerWin() {
-  socket.emit('game_event', {
-    playerId: 'player_123',
-    eventType: 'player.victory',
-    data: { killCount: 15 },
-    context: {}
-  });
-}
-```
-
-### 3. 使用Avatar SDK渲染3D伴侣
-
-```tsx
-import { AvatarController } from '@agl/avatar';
-import { useState, useEffect } from 'react';
-
-function Companion() {
-  const [emotion, setEmotion] = useState('neutral');
-  const [dialogue, setDialogue] = useState('');
-
-  useEffect(() => {
-    const socket = io('http://localhost:3000');
-
-    socket.on('companion_action', (action) => {
-      setEmotion(action.emotion);
-      setDialogue(action.dialogue);
-    });
-
-    return () => socket.disconnect();
-  }, []);
-
-  return (
-    <AvatarController
-      config={{
-        customization: {
-          modelSource: { type: 'gltf', url: '/models/companion.gltf' }
-        },
-        initialEmotion: emotion
-      }}
-      dialogueText={dialogue}
-      bubbleConfig={{
-        enabled: true,
-        position: 'top',
-        maxWidth: 300
-      }}
-    />
-  );
-}
+// Handle errors
+socket.on('error', (error) => {
+  console.error('Error:', error);
+});
 ```
 
 ---
 
-## 🗄️ 数据库管理
+## 🛠️ Configuration
 
-### 查看数据库
+### Environment Variables
+
+Create a `.env` file in the `services/monolith` directory (optional):
 
 ```bash
-# 安装SQLite浏览器
-npm install -g sqlite3
+# Server Configuration
+PORT=3000
+HOST=0.0.0.0
+NODE_ENV=development
 
-# 打开数据库
-sqlite3 services/monolith/agl.db
+# Database (SQLite is default)
+DATABASE_URL=file:./dev.db
 
-# 查看表
+# API Keys (optional, for LLM features)
+ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=sk-...
+
+# Logging
+LOG_LEVEL=info
+```
+
+### Custom Port
+
+```bash
+# Set custom port
+PORT=4000 npm run dev:monolith
+```
+
+### Production Build
+
+```bash
+# Build for production
+cd services/monolith
+npm run build
+
+# Start production server
+npm start
+```
+
+---
+
+## 📊 Development Tools
+
+### View Database (Prisma Studio)
+
+```bash
+cd services/monolith
+npx prisma studio
+```
+
+Opens at `http://localhost:5555` - browse tables, edit data, run queries.
+
+### View Database (SQLite CLI)
+
+```bash
+# Install sqlite3 (if not already installed)
+# npm install -g sqlite3
+
+# Open database
+sqlite3 services/monolith/dev.db
+
+# List tables
 .tables
 
-# 查询数据
+# Query players
 SELECT * FROM players;
-SELECT * FROM memories ORDER BY created_at DESC LIMIT 10;
+
+# Query games
+SELECT * FROM games;
+
+# Exit
+.quit
 ```
 
-### 备份数据库
+### Check Logs
 
 ```bash
-# 备份
-cp services/monolith/agl.db services/monolith/agl.db.backup
+# Run with debug logging
+LOG_LEVEL=debug npm run dev:monolith
+```
 
-# 恢复
-cp services/monolith/agl.db.backup services/monolith/agl.db
+### Monitor Performance
+
+```bash
+# Check memory usage
+node --expose-gc services/monolith/dist/main.js
+
+# Enable CPU profiling
+node --prof services/monolith/dist/main.js
 ```
 
 ---
 
-## 🚢 部署到生产环境
+## 🐛 Troubleshooting
 
-### 方法1：使用Railway（推荐）
-
-1. 访问 https://railway.app
-2. 连接GitHub仓库
-3. 添加环境变量:
-   ```
-   MONOLITH_PORT=3000
-   ```
-4. Railway自动部署！
-
-成本：$5-20/月
-
-### 方法2：VPS部署
+### Port Already in Use
 
 ```bash
-# SSH到服务器
-ssh user@your-server.com
+# Find process using port 3000
+# Windows:
+netstat -ano | findstr :3000
 
-# 克隆代码
-git clone <repository-url>
-cd agl
+# Mac/Linux:
+lsof -i :3000
 
-# 安装Node.js 20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# 启动服务
-cd services/monolith
-npm install
-npm run build
-npm start
-
-# 使用PM2保持运行
-npm install -g pm2
-pm2 start dist/server.js --name agl
-pm2 save
-pm2 startup
+# Kill process or use different port
+PORT=4000 npm run dev:monolith
 ```
 
-成本：$5/月（DigitalOcean/Linode）
-
----
-
-## 🔧 常见问题
-
-### Q: 如何更改端口？
-
-A: 设置环境变量 `MONOLITH_PORT`
+### Database Locked Error
 
 ```bash
-MONOLITH_PORT=8080 npm run dev:monolith
-```
+# Stop all processes using the database
+pkill -f "node.*monolith"
 
-### Q: 如何启用LLM对话生成？
+# Remove database lock
+rm services/monolith/dev.db-*
 
-A: 在 `.env` 文件中添加API密钥：
-
-```bash
-ANTHROPIC_API_KEY=sk-ant-xxx
-```
-
-LLM会在10%的情况下使用（特殊场景）。
-
-### Q: 数据库文件在哪里？
-
-A: `services/monolith/agl.db`
-
-### Q: 如何重置数据库？
-
-A: 删除 `agl.db` 文件，重启服务会自动创建新数据库。
-
-```bash
-rm services/monolith/agl.db
+# Restart
 npm run dev:monolith
 ```
 
-### Q: 支持多少并发用户？
+### Dependencies Not Installing
 
-A: 单进程可支持1000+并发连接。如需更多，请使用完整K8s版本。
+```bash
+# Clear cache and reinstall
+cd services/monolith
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+```
 
-### Q: 如何添加向量搜索？
+### TypeScript Compilation Errors
 
-A: 使用 `sqlite-vss` 扩展，详见完整文档。
+```bash
+cd services/monolith
+npm run build
+# Fix any errors shown
+```
 
----
+### Memory Errors
 
-## 📊 性能对比
-
-| 指标 | Monolith版本 | 完整K8s版本 |
-|------|-------------|------------|
-| 启动时间 | 1分钟 | 30分钟+ |
-| 响应延迟 | 10-50ms | 10-50ms |
-| 并发能力 | 1K用户 | 100K+用户 |
-| 月度成本 | $5 | $200 |
-| 部署难度 | ⭐ | ⭐⭐⭐⭐⭐ |
-| 水平扩展 | ❌ | ✅ |
-| 向量搜索 | 可选 | ✅ |
-
----
-
-## 🎓 下一步
-
-1. **添加更多游戏事件** - 扩展情绪规则引擎
-2. **自定义对话模板** - 编辑 `dialogue-generator.ts`
-3. **集成Avatar SDK** - 3D虚拟形象渲染
-4. **添加Vision SDK** - AI画面分析
-5. **生产部署** - Railway或VPS
+```bash
+# Increase Node.js memory limit
+NODE_OPTIONS="--max-old-space-size=4096" npm run dev:monolith
+```
 
 ---
 
-## 📚 更多资源
+## 🎯 Supported Features
 
-- [完整API文档](./docs/api/README.md)
-- [Unity SDK指南](./sdk/unity/README.md)
-- [Avatar SDK指南](./sdk/avatar/README.md)
-- [Vision SDK指南](./sdk/vision/README.md)
-- [简化部署指南](./docs/simplified-deployment.md)
+### ✅ Fully Supported
+
+- **Emotion Analysis**: Rule-based detection for 25+ event types
+- **Dialogue Generation**: Template-based for 14 emotions, 3 personas
+- **Memory Management**: SQLite-backed storage with basic search
+- **Multi-language**: English, Chinese, Japanese dialogue
+- **WebSocket**: Real-time event processing
+- **REST API**: Complete HTTP API
+
+### ⚠️ Limited in Monolith Mode
+
+- **ML Emotion Classification**: Requires external API (optional)
+- **LLM Dialogue Generation**: Requires Anthropic/OpenAI API (optional)
+- **Vector Search**: Basic text search only (no semantic embeddings)
+- **Advanced Caching**: In-memory only (Redis not available)
+
+### 💡 Upgrade to Microservices for:
+
+- PostgreSQL + Redis + Qdrant for production-scale data
+- ML-powered emotion classification
+- Advanced LLM dialogue with memory context
+- Horizontal scaling and high availability
+- Advanced caching and performance optimization
 
 ---
 
-**开始构建你的AI游戏伴侣吧！** 🎮🤖
+## 📈 Scaling Considerations
+
+### When to Switch to Microservices
+
+Consider migrating when:
+
+- **Users**: >100 concurrent connections
+- **Data**: >10,000 players or >100,000 events
+- **Features**: Need ML classification or semantic memory
+- **Deployment**: Moving to production
+- **Team**: Multiple developers working on different services
+
+### Migration Path
+
+```bash
+# 1. Export data from SQLite
+cd services/monolith
+npx prisma db pull
+npx prisma db push
+
+# 2. Start microservices stack
+cd ../..
+npm run dev:stack
+
+# 3. Configure PostgreSQL
+# Edit .env:
+DATABASE_PROVIDER=postgresql
+DATABASE_URL=postgresql://...
+
+# 4. Migrate data
+npm run db:migrate
+
+# 5. Start individual services
+npm run dev:api
+npm run dev:realtime
+npm run dev:emotion
+npm run dev:dialogue
+npm run dev:memory
+```
+
+---
+
+## 🎨 SDK Integration Examples
+
+### Unity
+
+```csharp
+using AGL;
+
+var client = new AGLClient(new AGLConfig
+{
+    ApiUrl = "http://localhost:3000"
+});
+
+await client.SendGameEvent("player.victory", new
+{
+    killCount = 15,
+    mvp = true
+});
+```
+
+📖 [Full Unity Guide](./sdk/unity/README.md)
+
+### Web / JavaScript
+
+```javascript
+import { AGLClient } from '@agl/web';
+
+const client = new AGLClient({
+  apiUrl: 'http://localhost:3000'
+});
+
+const result = await client.sendGameEvent('player.victory', {
+  killCount: 15,
+  mvp: true
+});
+
+console.log(result.emotion);
+console.log(result.dialogue);
+```
+
+📖 [Full Web Guide](./sdk/web/README.md)
+
+### Unreal Engine
+
+```cpp
+UAGLClient* Client = NewObject<UAGLClient>();
+
+FAGLConfig Config;
+Config.ApiUrl = TEXT("http://localhost:3000");
+Client->Initialize(Config);
+
+FAGLGameEvent Event;
+Event.EventType = TEXT("player.victory");
+Client->SendGameEvent(Event, Callback);
+```
+
+📖 [Full Unreal Guide](./sdk/unreal/README.md)
+
+---
+
+## 🔄 Deployment Options
+
+### Option 1: Deploy Monolith to VPS
+
+```bash
+# Build for production
+cd services/monolith
+npm run build
+
+# Copy to server
+scp -r dist package.json user@server:/opt/agl
+
+# On server
+cd /opt/agl
+npm install --production
+npm start
+```
+
+### Option 2: Docker Deployment
+
+```dockerfile
+# Dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY services/monolith/package*.json ./
+RUN npm ci --production
+COPY services/monolith/dist ./dist
+CMD ["npm", "start"]
+```
+
+```bash
+# Build and run
+docker build -t agl-monolith .
+docker run -p 3000:3000 -v $(pwd)/data:/app/data agl-monolith
+```
+
+### Option 3: Cloud Platforms
+
+**Railway:**
+```bash
+railway init
+railway up
+```
+
+**Render:**
+```bash
+# Connect GitHub repo
+# Set build command: cd services/monolith && npm install && npm run build
+# Set start command: cd services/monolith && npm start
+```
+
+**Heroku:**
+```bash
+heroku create agl-monolith
+git push heroku main
+```
+
+---
+
+## 📚 Next Steps
+
+### Learn More
+- [Main README](./README.md) - Project overview
+- [Full Quick Start](./QUICKSTART.md) - Microservices setup
+- [Architecture Guide](./CLAUDE.md) - Technical deep dive
+- [API Documentation](./docs/api/README.md) - Complete API reference
+
+### Advanced Features
+- [3D Avatar SDK](./sdk/avatar/README.md) - Add visual companions
+- [Vision AI SDK](./sdk/vision/README.md) - Screen analysis
+- [Deployment Guide](./DEPLOYMENT.md) - Production deployment
+
+### Get Help
+- [GitHub Issues](https://github.com/J0hnFFFF/agl/issues)
+- [Discussions](https://github.com/J0hnFFFF/agl/discussions)
+- [Documentation](./docs)
+
+---
+
+**You're all set! Start building with AGL Monolith Mode! 🎮✨**
