@@ -1,0 +1,5 @@
+# AGL Test Suite Requirements
+requests>=2.31.0
+python-socketio>=5.10.0
+websocket-client>=1.6.4
+colorama>=0.4.6  # For Windows color support

@@ -110,12 +110,40 @@ export function analyzeWithRules(
   }
 
   // Achievement events
-  if (eventType === 'achievement.unlocked' || eventType === 'player.levelup') {
+  if (
+    eventType === 'achievement.unlocked' ||
+    eventType === 'player.achievement' ||
+    eventType === 'player.levelup' ||
+    eventType === 'player.level_up'
+  ) {
     return {
       emotion: 'proud',
       intensity: 0.8,
       confidence: 0.95,
       action: 'celebrate',
+      method: 'rule'
+    };
+  }
+
+  // Item acquired events
+  if (eventType === 'player.item_acquired' || eventType === 'item.obtained') {
+    const isRare = data.rarity === 'rare' || data.rarity === 'legendary';
+
+    if (isRare) {
+      return {
+        emotion: 'excited',
+        intensity: 0.8,
+        confidence: 0.9,
+        action: 'celebrate',
+        method: 'rule'
+      };
+    }
+
+    return {
+      emotion: 'happy',
+      intensity: 0.6,
+      confidence: 0.85,
+      action: 'appreciate',
       method: 'rule'
     };
   }
