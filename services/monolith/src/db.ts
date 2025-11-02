@@ -87,6 +87,29 @@ export function initDatabase() {
 
   console.log('✅ Database tables created');
 
+  // Insert default client for testing if not exists
+  const clientCheck = db.prepare('SELECT COUNT(*) as count FROM clients').get() as { count: number };
+
+  if (clientCheck.count === 0) {
+    console.log('📝 Inserting default test client...');
+
+    const defaultClient = db.prepare(`
+      INSERT INTO clients (id, name, email, api_key, tier, quota_per_month)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `);
+
+    defaultClient.run(
+      'test_client',
+      'Test Client',
+      'test@example.com',
+      'test_api_key_' + Date.now(),
+      'FREE',
+      10000
+    );
+
+    console.log('✅ Default test client created (id: test_client)');
+  }
+
   return db;
 }
 
