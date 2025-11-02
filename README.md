@@ -392,7 +392,7 @@ This project is currently closed source. Contact the development team for licens
 
 - **Documentation**: Browse the [docs/](./docs) directory
 - **Issues**: Report bugs or request features via GitHub Issues
-- **Email**: contact@agl-platform.com (placeholder)
+- **Email**: j0hn.wahahaha@gmail.com (placeholder)
 
 ---
 

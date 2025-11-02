@@ -413,7 +413,7 @@ npm run test:load
 
 - **文档**：浏览 [docs/](./docs) 目录
 - **问题**：通过GitHub Issues报告bug或请求功能
-- **邮箱**：contact@agl-platform.com（占位符）
+- **邮箱**：j0hn.wahahaha@gmail.com（占位符）
 
 ---
 
