@@ -117,6 +117,8 @@ AGL provides game developers with an SDK to integrate AI-powered companion chara
 - 💬 **AI Dialogue Generation** - LLM-powered contextual conversations
 - 🧠 **Memory System** - Three-tier memory (short-term, long-term, semantic)
 - 🎮 **Multi-Platform SDKs** - Unity, Unreal, Web
+- 👤 **3D Avatar Rendering** - Three.js-based emotion animation engine with GLTF support
+- 👁️ **Vision AI Analysis** - GPT-4V/Claude Vision game screen understanding
 - ☁️ **Cloud Service** - Scalable, reliable backend infrastructure
 
 ## Architecture
@@ -125,41 +127,49 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture and technical documentati
 
 ## Quick Start
 
-### Prerequisites
+### Option 1: Simplified Development (Recommended for Beginners)
 
+**Using SQLite - No Docker Required!**
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd agl
+
+# One command to start everything!
+npm run dev:monolith
+```
+
+That's it! Service runs at `http://localhost:3000`
+
+See [SQLite Development Guide](./docs/development-sqlite.md) for details.
+
+### Option 2: Full Microservices (Production-like)
+
+**Prerequisites:**
 - Node.js 20+
 - Python 3.11+
 - Docker & Docker Compose
 - npm 10+
 
-### 1. Clone the repository
+**Steps:**
 
 ```bash
+# 1. Clone repository
 git clone <repository-url>
 cd agl
-```
 
-### 2. Setup environment
-
-```bash
-# Copy environment template
+# 2. Setup environment
 cp .env.example .env
-
 # Edit .env and add your API keys
-# - ANTHROPIC_API_KEY
-# - OPENAI_API_KEY (optional)
-```
 
-### 3. Start development stack
-
-```bash
-# Start databases (PostgreSQL, Redis, Qdrant)
+# 3. Start databases (PostgreSQL, Redis, Qdrant)
 npm run dev:stack
 
-# Install dependencies
+# 4. Install dependencies
 npm run setup
 
-# Run database migrations
+# 5. Run database migrations
 npm run db:migrate
 ```
 
@@ -199,8 +209,12 @@ agl/
 │   │   ├── Runtime/       # Runtime scripts
 │   │   ├── Editor/        # Unity Editor integration
 │   │   └── Samples/       # Example code
-│   ├── unreal/            # Unreal C++ SDK (planned)
-│   └── web/               # Web TypeScript SDK (planned)
+│   ├── unreal/            # Unreal C++ SDK ✅
+│   ├── web/               # Web TypeScript SDK ✅
+│   ├── avatar/            # 3D Avatar Rendering Engine ✅
+│   │   └── src/           # Three.js + React Three Fiber
+│   └── vision/            # Vision AI Analysis SDK ✅
+│       └── src/           # Screen capture + GPT-4V/Claude Vision
 ├── services/              # Backend services
 │   ├── api-service/       # NestJS API service ✅
 │   ├── realtime-gateway/  # Socket.IO gateway ✅
@@ -272,8 +286,10 @@ npm run db:reset          # Reset database
 
 ### SDK Documentation
 - [Unity SDK Guide](./sdk/unity/README.md) - Unity C# SDK with full API reference ✨
-- [Web SDK Guide](./sdk/web/README.md) - TypeScript SDK for browser and Node.js ✨ NEW
-- [Unreal SDK Guide](./sdk/unreal/README.md) - Unreal Engine C++ plugin with Blueprint support ✨ NEW
+- [Web SDK Guide](./sdk/web/README.md) - TypeScript SDK for browser and Node.js ✨
+- [Unreal SDK Guide](./sdk/unreal/README.md) - Unreal Engine C++ plugin with Blueprint support ✨
+- [Avatar SDK Guide](./sdk/avatar/README.md) - 3D avatar rendering engine with emotion animations ✨
+- [Vision SDK Guide](./sdk/vision/README.md) - AI-powered game screen analysis ✨
 
 ## Roadmap
 

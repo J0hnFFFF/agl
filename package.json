@@ -20,6 +20,8 @@
     "dev:memory": "npm run dev --workspace=services/memory-service",
     "dev:emotion": "cd services/emotion-service && uvicorn main:app --reload --port 8000",
     "dev:dialogue": "cd services/dialogue-service && uvicorn main:app --reload --port 8001",
+    "dev:monolith": "cd services/monolith && npm install && npm run dev",
+    "start:monolith": "cd services/monolith && npm install && npm run build && npm start",
     "build": "npm run build --workspaces",
     "build:docker": "docker-compose -f docker-compose.prod.yml build",
     "test": "npm run test --workspaces",

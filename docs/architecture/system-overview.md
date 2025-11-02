@@ -94,19 +94,24 @@ AGL (AI Game Companion Engine) is a cloud-based SaaS platform that provides emot
 **Purpose**: Provide easy integration for game developers
 
 **Components**:
-- Unity SDK (C#)
-- Unreal SDK (C++)
-- Web SDK (TypeScript)
+- **Unity SDK (C#)** - Native Unity integration with UnityWebRequest
+- **Unreal SDK (C++)** - Blueprint + C++ support for UE5
+- **Web SDK (TypeScript)** - Browser and Node.js support
+- **Avatar SDK (Three.js + React)** - 3D avatar rendering engine
+- **Vision SDK (TypeScript)** - AI-powered screen analysis
 
 **Responsibilities**:
 - Event collection from game
 - Local rule-based emotion detection (instant feedback)
 - WebSocket connection management
 - Avatar rendering and animation
+- Game screen capture and analysis
 - Offline mode with cached dialogues
 
 **Key Features**:
 - **Hybrid Processing**: Local rules for instant feedback (<50ms), cloud for intelligence
+- **3D Avatar Engine**: Three.js-based rendering with 12 emotions × 3 intensity levels
+- **Vision AI Integration**: GPT-4V/Claude Vision for game state recognition
 - **Graceful Degradation**: Works offline with pre-downloaded content
 - **Auto-Reconnection**: Handles network interruptions
 - **Event Batching**: Reduces network overhead

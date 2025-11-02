@@ -81,7 +81,8 @@ This is an **AI Game Companion Engine** (AI游戏陪伴引擎) - a cloud-based S
 - **Unity**: C# plugin (.unitypackage)
 - **Unreal**: C++ plugin
 - **Web**: TypeScript SDK (WebGL games)
-- **Avatar Rendering**: Live2D (primary), VRM, Spine
+- **Avatar Rendering**: Three.js + React Three Fiber (3D engine), Live2D, VRM, Spine
+- **Vision AI**: Screen capture + GPT-4V/Claude Vision integration
 - **Communication**: Socket.IO client + HTTP client
 
 ### API Service Layer
@@ -129,7 +130,9 @@ agl/
 ├── sdk/
 │   ├── unity/                 # Unity SDK (C#)
 │   ├── unreal/                # Unreal SDK (C++)
-│   └── web/                   # Web SDK (TypeScript)
+│   ├── web/                   # Web SDK (TypeScript)
+│   ├── avatar/                # 3D Avatar Rendering Engine (Three.js)
+│   └── vision/                # Vision AI Analysis (Screen Capture + GPT-4V/Claude)
 ├── services/
 │   ├── api-service/           # NestJS API service
 │   │   ├── src/

@@ -1,0 +1,20 @@
+version: '3.9'
+
+# Minimal Docker Compose for SQLite Development
+# Only starts services that can't be replaced with SQLite/in-memory
+
+services:
+  # Redis Commander - Optional UI for Redis
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: agl-redis-commander-dev
+    environment:
+      - REDIS_HOSTS=local:host.docker.internal:6379
+    ports:
+      - "8081:8081"
+    profiles:
+      - optional
+
+networks:
+  default:
+    name: agl-network-dev

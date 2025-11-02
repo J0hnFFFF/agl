@@ -1,19 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(DATABASE_URL=\"postgresql://temp:temp@localhost:5432/temp\" npx prisma migrate:*)",
-      "Bash(npm install:*)",
-      "Bash(npm test)",
-      "Bash(npm test:*)",
-      "Bash(npm run lint)",
-      "Bash(npx eslint:*)",
-      "Bash(npx prisma migrate:*)",
       "Bash(tree:*)",
-      "Bash(find:*)",
-      "Bash(awk:*)",
-      "Bash(git mv:*)",
-      "Bash(for file in *.md)",
-      "Bash(done)"
+      "Bash(dir:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
