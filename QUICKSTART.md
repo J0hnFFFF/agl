@@ -126,7 +126,7 @@ cd ../..
 
 ### Step 5: Start Services
 
-Open **5 separate terminals** and run:
+**Core Services** - Open **5 separate terminals** and run:
 
 ```bash
 # Terminal 1 - API Service (Port 3000)
@@ -145,15 +145,27 @@ npm run dev:dialogue
 npm run dev:memory
 ```
 
+**Optional Services** (Phase 4B) - Open **2 additional terminals**:
+
+```bash
+# Terminal 6 - Voice Service (Port 8003) - Text-to-Speech
+npm run dev:voice
+
+# Terminal 7 - Analytics Dashboard (Port 5000) - Monitoring
+npm run dev:dashboard
+```
+
 ### Services Available
 
-| Service | URL | Purpose |
-|---------|-----|---------|
-| API Service | http://localhost:3000 | Main REST API |
-| Realtime Gateway | ws://localhost:3001 | WebSocket events |
-| Emotion Service | http://localhost:8000 | Emotion analysis |
-| Dialogue Service | http://localhost:8001 | Dialogue generation |
-| Memory Service | http://localhost:3002 | Memory management |
+| Service | URL | Purpose | Status |
+|---------|-----|---------|--------|
+| **API Service** | http://localhost:3000 | Main REST API | Required |
+| **Realtime Gateway** | ws://localhost:3001 | WebSocket events | Required |
+| **Emotion Service** | http://localhost:8000 | Emotion analysis | Required |
+| **Dialogue Service** | http://localhost:8001 | Dialogue generation | Required |
+| **Memory Service** | http://localhost:3002 | Memory management | Required |
+| **Voice Service** | http://localhost:8003 | Text-to-speech synthesis | Optional |
+| **Dashboard** | http://localhost:5000 | Analytics & monitoring | Optional |
 
 ---
 
@@ -266,6 +278,43 @@ curl -X POST http://localhost:3000/api/memory/store \
 ```bash
 curl "http://localhost:3000/api/memory/search?playerId=player_001&limit=5"
 ```
+
+### Synthesize Voice (Optional - Voice Service)
+
+```bash
+curl -X POST http://localhost:8003/synthesize \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "Incredible! You are unstoppable today!",
+    "voice": "nova",
+    "language": "en"
+  }'
+```
+
+Response:
+```json
+{
+  "audio_url": "http://localhost:8003/audio/abc123.mp3",
+  "duration": 2.5,
+  "cost_usd": 0.00075,
+  "method": "tts",
+  "cached": false
+}
+```
+
+### View Analytics Dashboard (Optional)
+
+Open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+**Dashboard Features:**
+- Real-time request monitoring (last 24 hours)
+- Cost analytics and budget tracking
+- Performance metrics (P50/P95/P99 latency)
+- Service health status
+- Cache hit rates
 
 ---
 
@@ -502,6 +551,7 @@ DATABASE_URL=file:./dev.db
 
 ## 📊 Health Checks
 
+**Core Services:**
 ```bash
 # API Service
 curl http://localhost:3000/health
@@ -514,6 +564,15 @@ curl http://localhost:8001/health
 
 # Memory Service
 curl http://localhost:3002/health
+```
+
+**Optional Services (Phase 4B):**
+```bash
+# Voice Service
+curl http://localhost:8003/health
+
+# Analytics Dashboard
+curl http://localhost:5000/health
 ```
 
 ---

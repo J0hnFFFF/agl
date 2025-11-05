@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}游戏详情 - {{ game_id }} - AGL Dashboard{% endblock %}
+
+{% block content %}
+<div class="px-4 sm:px-0">
+    <!-- Page header -->
+    <div class="mb-8">
+        <a href="/" class="text-sm text-blue-600 hover:text-blue-800 mb-2 inline-block">
+            ← 返回概览
+        </a>
+        <h1 class="text-3xl font-bold text-gray-900">游戏详情</h1>
+        <p class="mt-2 text-sm text-gray-600">
+            游戏 ID: <code class="px-2 py-1 bg-gray-100 rounded">{{ game_id }}</code>
+        </p>
+    </div>
+
+    <!-- Time range selector -->
+    <div class="mb-6">
+        <select id="daysSelector" class="block w-48 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <option value="7" {% if days == 7 %}selected{% endif %}>最近 7 天</option>
+            <option value="30" {% if days == 30 %}selected{% endif %}>最近 30 天</option>
+            <option value="90" {% if days == 90 %}selected{% endif %}>最近 90 天</option>
+        </select>
+    </div>
+
+    {% if usage_stats %}
+    <!-- Usage summary cards -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8 fade-in">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">总事件数</dt>
+                    <dd class="text-3xl font-semibold text-gray-900">{{ "{:,}".format(usage_stats.summary.totalEvents) }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">总玩家数</dt>
+                    <dd class="text-3xl font-semibold text-gray-900">{{ "{:,}".format(usage_stats.summary.totalPlayers) }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">平均延迟</dt>
+                    <dd class="text-3xl font-semibold text-gray-900">{{ "%.0f"|format(usage_stats.summary.avgLatency) }}ms</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">总成本</dt>
+                    <dd class="text-3xl font-semibold text-gray-900">${{ "%.2f"|format(usage_stats.summary.totalCost) }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emotion distribution -->
+    {% if emotion_dist %}
+    <div class="bg-white shadow rounded-lg p-6 mb-8">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">情感分布</h3>
+        <canvas id="emotionChart" class="w-full"></canvas>
+    </div>
+    {% endif %}
+
+    <!-- Daily stats chart -->
+    <div class="bg-white shadow rounded-lg p-6 mb-8">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">每日统计趋势</h3>
+        <canvas id="dailyStatsChart" class="w-full" height="80"></canvas>
+    </div>
+
+    <!-- Service breakdown -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-3 mb-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">情感识别</h3>
+            <dl class="space-y-2">
+                <div class="flex justify-between">
+                    <dt class="text-sm text-gray-600">总请求数</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(usage_stats.summary.emotionRequests) }}</dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">对话生成</h3>
+            <dl class="space-y-2">
+                <div class="flex justify-between">
+                    <dt class="text-sm text-gray-600">总请求数</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(usage_stats.summary.dialogueRequests) }}</dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">记忆服务</h3>
+            <dl class="space-y-2">
+                <div class="flex justify-between">
+                    <dt class="text-sm text-gray-600">总操作数</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(usage_stats.summary.memoryOperations) }}</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- No data state -->
+    <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">暂无游戏数据</h3>
+        <p class="mt-1 text-sm text-gray-500">该游戏暂无使用数据或检查 API 连接。</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if usage_stats and emotion_dist %}
+<script>
+// Days selector
+document.getElementById('daysSelector').addEventListener('change', function() {
+    window.location.href = '/game/{{ game_id }}?days=' + this.value;
+});
+
+// Emotion distribution chart
+const emotionData = {{ emotion_dist | tojson }};
+const emotions = Object.keys(emotionData);
+const counts = Object.values(emotionData);
+
+const ctx1 = document.getElementById('emotionChart').getContext('2d');
+new Chart(ctx1, {
+    type: 'bar',
+    data: {
+        labels: emotions,
+        datasets: [{
+            label: '情感计数',
+            data: counts,
+            backgroundColor: [
+                '#3B82F6', '#10B981', '#F59E0B', '#EF4444',
+                '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Daily stats chart
+const dailyStats = {{ usage_stats.dailyStats | tojson }};
+const dates = dailyStats.map(d => d.date.substring(0, 10));
+const events = dailyStats.map(d => d.totalEvents);
+const players = dailyStats.map(d => d.uniquePlayers);
+
+const ctx2 = document.getElementById('dailyStatsChart').getContext('2d');
+new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: dates,
+        datasets: [
+            {
+                label: '事件数',
+                data: events,
+                borderColor: '#3B82F6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
+                tension: 0.4,
+                yAxisID: 'y'
+            },
+            {
+                label: '玩家数',
+                data: players,
+                borderColor: '#10B981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4,
+                yAxisID: 'y1'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        },
+        scales: {
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                beginAtZero: true
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                beginAtZero: true,
+                grid: {
+                    drawOnChartArea: false
+                }
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

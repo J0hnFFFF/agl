@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}404 - 页面未找到 - AGL Dashboard{% endblock %}
+
+{% block content %}
+<div class="text-center py-20">
+    <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <h1 class="mt-6 text-4xl font-bold text-gray-900">404</h1>
+    <p class="mt-2 text-lg text-gray-600">页面未找到</p>
+    <p class="mt-4 text-sm text-gray-500">
+        抱歉，您访问的页面不存在。
+    </p>
+    <div class="mt-8">
+        <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+            返回首页
+        </a>
+    </div>
+</div>
+{% endblock %}

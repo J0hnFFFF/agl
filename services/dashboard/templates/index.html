@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}平台概览 - AGL Dashboard{% endblock %}
+
+{% block content %}
+<div class="px-4 sm:px-0">
+    <!-- Page header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">平台概览</h1>
+        <p class="mt-2 text-sm text-gray-600">
+            AGL 游戏陪伴引擎 - 整体运营数据
+        </p>
+    </div>
+
+    <!-- Time range selector -->
+    <div class="mb-6">
+        <select id="daysSelector" class="block w-48 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            <option value="7" {% if days == 7 %}selected{% endif %}>最近 7 天</option>
+            <option value="30" {% if days == 30 %}selected{% endif %}>最近 30 天</option>
+            <option value="90" {% if days == 90 %}selected{% endif %}>最近 90 天</option>
+        </select>
+    </div>
+
+    {% if stats %}
+    <!-- Key metrics grid -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8 fade-in">
+        <!-- Active Games -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">活跃游戏</dt>
+                            <dd class="text-3xl font-semibold text-gray-900">{{ stats.activeGames }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Players -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">总玩家数</dt>
+                            <dd class="text-3xl font-semibold text-gray-900">{{ "{:,}".format(stats.totalPlayers) }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Events -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">总事件数</dt>
+                            <dd class="text-3xl font-semibold text-gray-900">{{ "{:,}".format(stats.totalEvents) }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Cost -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">总成本</dt>
+                            <dd class="text-3xl font-semibold text-gray-900">${{ "%.2f"|format(stats.totalCost) }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service requests breakdown -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 mb-8">
+        <!-- Request counts -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">服务请求统计</h3>
+            <dl class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <dt class="text-sm text-gray-600">情感识别请求</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(stats.emotionRequests) }}</dd>
+                </div>
+                <div class="flex justify-between items-center">
+                    <dt class="text-sm text-gray-600">对话生成请求</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(stats.dialogueRequests) }}</dd>
+                </div>
+                <div class="flex justify-between items-center">
+                    <dt class="text-sm text-gray-600">记忆创建</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(stats.memoryCreated) }}</dd>
+                </div>
+                <div class="flex justify-between items-center">
+                    <dt class="text-sm text-gray-600">记忆搜索</dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ "{:,}".format(stats.memorySearches) }}</dd>
+                </div>
+            </dl>
+        </div>
+
+        <!-- Method usage chart -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">方法使用分布</h3>
+            <canvas id="methodUsageChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Emotion vs Dialogue breakdown -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 mb-8">
+        <!-- Emotion methods -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">情感识别方法</h3>
+            <div class="space-y-3">
+                {% set emotion_total = stats.usage.emotionRule + stats.usage.emotionMl + stats.usage.emotionCached %}
+                {% if emotion_total > 0 %}
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm text-gray-600">规则引擎</span>
+                        <span class="text-sm font-semibold">{{ "{:.1f}".format(stats.usage.emotionRule / emotion_total * 100) }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ stats.usage.emotionRule / emotion_total * 100 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm text-gray-600">ML 分类器</span>
+                        <span class="text-sm font-semibold">{{ "{:.1f}".format(stats.usage.emotionMl / emotion_total * 100) }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ stats.usage.emotionMl / emotion_total * 100 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm text-gray-600">缓存命中</span>
+                        <span class="text-sm font-semibold">{{ "{:.1f}".format(stats.usage.emotionCached / emotion_total * 100) }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ stats.usage.emotionCached / emotion_total * 100 }}%"></div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-sm text-gray-500">暂无数据</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Dialogue methods -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">对话生成方法</h3>
+            <div class="space-y-3">
+                {% set dialogue_total = stats.usage.dialogueTemplate + stats.usage.dialogueLlm + stats.usage.dialogueCached %}
+                {% if dialogue_total > 0 %}
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm text-gray-600">模板库</span>
+                        <span class="text-sm font-semibold">{{ "{:.1f}".format(stats.usage.dialogueTemplate / dialogue_total * 100) }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ stats.usage.dialogueTemplate / dialogue_total * 100 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm text-gray-600">LLM 生成</span>
+                        <span class="text-sm font-semibold">{{ "{:.1f}".format(stats.usage.dialogueLlm / dialogue_total * 100) }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-purple-500 h-2 rounded-full" style="width: {{ stats.usage.dialogueLlm / dialogue_total * 100 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm text-gray-600">缓存命中</span>
+                        <span class="text-sm font-semibold">{{ "{:.1f}".format(stats.usage.dialogueCached / dialogue_total * 100) }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ stats.usage.dialogueCached / dialogue_total * 100 }}%"></div>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-sm text-gray-500">暂无数据</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Info box -->
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-blue-700">
+                    本页面显示最近 <strong>{{ days }} 天</strong>的平台整体数据。
+                    查看 <a href="/costs" class="underline font-semibold">成本分析</a> 或 <a href="/realtime" class="underline font-semibold">实时监控</a> 获取更多详情。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- No data state -->
+    <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">暂无数据</h3>
+        <p class="mt-1 text-sm text-gray-500">等待数据加载或检查 API 连接。</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if stats %}
+<script>
+// Days selector
+document.getElementById('daysSelector').addEventListener('change', function() {
+    window.location.href = '/?days=' + this.value;
+});
+
+// Method usage chart
+const ctx = document.getElementById('methodUsageChart').getContext('2d');
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['规则引擎', 'ML分类器', '模板库', 'LLM生成', '缓存命中'],
+        datasets: [{
+            data: [
+                {{ stats.usage.emotionRule }},
+                {{ stats.usage.emotionMl }},
+                {{ stats.usage.dialogueTemplate }},
+                {{ stats.usage.dialogueLlm }},
+                {{ stats.usage.emotionCached + stats.usage.dialogueCached }}
+            ],
+            backgroundColor: [
+                '#3B82F6', // blue
+                '#10B981', // green
+                '#8B5CF6', // purple
+                '#F59E0B', // amber
+                '#EF4444'  // red
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

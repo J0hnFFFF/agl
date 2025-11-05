@@ -1,0 +1,97 @@
+{
+  "characters": [
+    {
+      "id": "1",
+      "name": "Cheerful Companion",
+      "persona": "cheerful",
+      "description": "An energetic and positive companion who celebrates your victories",
+      "gender": "female",
+      "voice": {
+        "defaultVoice": "nova",
+        "language": "zh-CN",
+        "speed": 1.0
+      },
+      "model": {
+        "scale": 1.0,
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "avatarSettings": {
+          "shadows": true,
+          "antialias": true,
+          "autoRotate": false
+        }
+      }
+    },
+    {
+      "id": "2",
+      "name": "Cool Mentor",
+      "persona": "cool",
+      "description": "A calm and strategic mentor who provides tactical advice",
+      "gender": "male",
+      "voice": {
+        "defaultVoice": "onyx",
+        "language": "zh-CN",
+        "speed": 1.0
+      },
+      "model": {
+        "scale": 1.0,
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "avatarSettings": {
+          "shadows": true,
+          "antialias": true,
+          "autoRotate": false
+        }
+      }
+    },
+    {
+      "id": "3",
+      "name": "Cute Assistant",
+      "persona": "cute",
+      "description": "A friendly and supportive assistant who encourages you",
+      "gender": "female",
+      "voice": {
+        "defaultVoice": "shimmer",
+        "language": "zh-CN",
+        "speed": 1.0
+      },
+      "model": {
+        "scale": 1.0,
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "avatarSettings": {
+          "shadows": true,
+          "antialias": true,
+          "autoRotate": false
+        }
+      }
+    }
+  ],
+  "animations": {
+    "idle": "idle.gltf",
+    "emotions": [
+      "happy",
+      "sad",
+      "angry",
+      "excited",
+      "proud",
+      "confident",
+      "disappointed",
+      "frustrated",
+      "surprised",
+      "fearful",
+      "disgusted",
+      "neutral"
+    ],
+    "intensities": ["subtle", "normal", "intense"]
+  }
+}

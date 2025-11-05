@@ -3,7 +3,9 @@
     "allow": [
       "Bash(tree:*)",
       "Bash(dir:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []
