@@ -145,13 +145,25 @@ npm run dev:dialogue
 npm run dev:memory
 ```
 
-**Optional Services** (Phase 4B) - Open **2 additional terminals**:
+**Optional Services** (Phase 4B + Phase 5) - Open additional terminals as needed:
 
 ```bash
 # Terminal 6 - Voice Service (Port 8003) - Text-to-Speech
 npm run dev:voice
 
-# Terminal 7 - Analytics Dashboard (Port 5000) - Monitoring
+# Terminal 7 - STT Service (Port 8004) - Speech Recognition
+npm run dev:stt
+
+# Terminal 8 - Voice Dialogue (Port 8005) - Voice Orchestration
+npm run dev:voice-dialogue
+
+# Terminal 9 - Lip Sync Service (Port 8006) - Animation
+npm run dev:lipsync
+
+# Terminal 10 - Vision Service (Port 8007) - Screenshot Analysis
+npm run dev:vision
+
+# Terminal 11 - Analytics Dashboard (Port 5000) - Monitoring
 npm run dev:dashboard
 ```
 
@@ -165,6 +177,10 @@ npm run dev:dashboard
 | **Dialogue Service** | http://localhost:8001 | Dialogue generation | Required |
 | **Memory Service** | http://localhost:3002 | Memory management | Required |
 | **Voice Service** | http://localhost:8003 | Text-to-speech synthesis | Optional |
+| **STT Service** | http://localhost:8004 | Speech recognition | Optional |
+| **Voice Dialogue** | http://localhost:8005 | Voice orchestration | Optional |
+| **Lip Sync Service** | http://localhost:8006 | Lip sync animation | Optional |
+| **Vision Service** | http://localhost:8007 | Screenshot analysis | Optional |
 | **Dashboard** | http://localhost:5000 | Analytics & monitoring | Optional |
 
 ---
@@ -566,10 +582,22 @@ curl http://localhost:8001/health
 curl http://localhost:3002/health
 ```
 
-**Optional Services (Phase 4B):**
+**Optional Services (Phase 4B + Phase 5):**
 ```bash
-# Voice Service
+# Voice Service (TTS)
 curl http://localhost:8003/health
+
+# STT Service (Speech Recognition)
+curl http://localhost:8004/health
+
+# Voice Dialogue Service
+curl http://localhost:8005/health
+
+# Lip Sync Service
+curl http://localhost:8006/health
+
+# Vision Service
+curl http://localhost:8007/health
 
 # Analytics Dashboard
 curl http://localhost:5000/health

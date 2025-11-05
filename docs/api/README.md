@@ -24,16 +24,53 @@ This document describes the complete API specification. Below is the current imp
   - Memory importance updates
   - Memory cleanup
 
-### 🚧 In Development (Phase 2)
+### ✅ Implemented (Phase 4B)
+- **Voice Service** (Port 8003) - Text-to-speech synthesis
+  - Synthesize speech from text with OpenAI TTS
+  - 3 character voice personas (cheerful, cool, cute)
+  - 7-day caching for cost optimization
+  - Daily budget management
+- **Analytics Dashboard** (Port 5000) - Real-time monitoring
+  - Request metrics and latency tracking
+  - Cost analytics and budget alerts
+  - Cache hit rate monitoring
+  - Service health status
+
+### ✅ Implemented (Phase 5)
+- **STT Service** (Port 8004) - Speech-to-text recognition
+  - Transcribe audio to text using OpenAI Whisper
+  - Voice Activity Detection (VAD) for cost savings
+  - 7-day caching, daily budget management
+- **Voice Dialogue Service** (Port 8005) - Voice interaction orchestration
+  - Complete pipeline: STT → Dialogue → TTS
+  - Automatic retry with exponential backoff
+  - Per-stage performance tracking
+- **Lip Sync Service** (Port 8006) - Lip sync animation generation
+  - Phoneme extraction from audio
+  - 15 standard visemes mapping
+  - Multi-format output (Unity, Unreal, Web, Standard)
+- **Vision Service** (Port 8007) - AI-powered screenshot analysis
+  - Dual API support (GPT-4V + Claude Vision)
+  - Scene detection, character recognition, event detection
+  - Image optimization, 1-hour caching
+  - Daily budget management ($50/day)
+
+### 🚧 In Development
 - Event submission endpoint
 - Analytics endpoints
 
-### 📋 Planned (Phase 3)
+### 📋 Planned (Phase 6)
 - Advanced analytics
 - Webhook support
 - Batch operations
 
 > **Note**: All endpoints are documented below. Endpoints marked with 🚧 are planned but not yet implemented.
+
+> **Phase 5 Services**: The new multimodal services (STT, Voice Dialogue, Lip Sync, Vision) have their own dedicated API endpoints. See their respective README files for detailed API documentation:
+> - [STT Service API](../../services/stt-service/README.md)
+> - [Voice Dialogue Service API](../../services/voice-dialogue-service/README.md)
+> - [Lip Sync Service API](../../services/lipsync-service/README.md)
+> - [Vision Service API](../../services/vision-service/README.md)
 
 ## Base URL
 

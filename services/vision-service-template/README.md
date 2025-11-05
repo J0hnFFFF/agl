@@ -1,4 +1,27 @@
-# Vision Service Template (Architecture Reference)
+# ⚠️ [DEPRECATED] Vision Service Template
+
+## 🚫 此服务已废弃 - 请使用 Vision Service
+
+**此模板已被完整的 Vision Service 替代。请使用 `services/vision-service/` 代替。**
+
+- **已废弃**: `services/vision-service-template/` (本目录)
+- **✅ 使用新版本**: `services/vision-service/` - 完整的生产级实现
+
+### 废弃原因
+
+在 **Phase 5** 中，我们实现了完整的生产级 Vision Service：
+- ✅ 完整的 GPT-4V + Claude Vision 集成
+- ✅ 场景分析、角色识别、事件检测
+- ✅ 图像优化 (20-40% 成本节省)
+- ✅ 智能缓存 (1小时 TTL)
+- ✅ 日预算管理 ($50/day)
+- ✅ 80+ 测试，85%+ 覆盖率
+
+**本目录仅作为 Phase 4B 的历史参考保留。**
+
+---
+
+# Vision Service Template (Architecture Reference - Historical)
 
 ⚠️ **注意：这是一个架构模板/参考实现，核心功能未完全实现**
 

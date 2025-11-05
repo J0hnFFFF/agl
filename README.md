@@ -25,8 +25,8 @@ AGL (AI Game Companion Engine) is a **cloud-based SaaS platform** that provides 
 - 🧠 **Remember interactions** with semantic memory powered by vector search
 - 🌍 **Support 4 languages** (English, Chinese, Japanese, Korean)
 - 🎨 **Animate in 3D** with emotion-driven expressions (37 animations per character)
-- 🎙️ **Speak with voice** - AI-generated speech with multiple voices
-- 👁️ **Understand game visuals** - AI-powered screen analysis (optional)
+- 🎤 **Voice interaction** - Complete voice dialogue with STT, TTS, and lip sync
+- 👁️ **Visual understanding** - AI-powered game screen analysis and scene detection
 - 📊 **Track everything** - Built-in analytics dashboard for monitoring
 
 **Perfect for**: Game studios, indie developers, and anyone building engaging game experiences.
@@ -44,8 +44,8 @@ AGL (AI Game Companion Engine) is a **cloud-based SaaS platform** that provides 
 | 🧠 **Memory System** | Three-tier memory with semantic search | PostgreSQL + Qdrant + Redis |
 | 🌐 **Multi-language** | English, Chinese, Japanese, Korean dialogue (300+ templates each) | i18n Template System |
 | 🎨 **3D Avatars** | 3 characters, 37 animations each, CDN-hosted models | Three.js + React Three Fiber |
-| 🎙️ **Voice Synthesis** | Text-to-speech with 3 character voices, 7-day caching | OpenAI TTS API |
-| 👁️ **Vision AI** | Game screen understanding for context awareness (optional) | GPT-4V / Claude Vision |
+| 🎤 **Voice Interaction** | Complete voice dialogue: STT (Whisper) + TTS + Lip Sync | OpenAI Whisper + TTS API |
+| 👁️ **Vision Analysis** | Game screenshot understanding, scene detection, event recognition | GPT-4V + Claude Vision |
 | 📊 **Analytics Dashboard** | Real-time monitoring, cost tracking, performance metrics | Flask + Chart.js |
 
 ### Developer Experience
@@ -113,13 +113,17 @@ cd services/api-service && npx prisma generate && npx prisma migrate dev && cd .
 npm run dev:all
 
 # Or start services individually (in separate terminals):
-npm run dev:api         # API Service (port 3000)
-npm run dev:realtime    # Realtime Gateway (port 3001)
-npm run dev:emotion     # Emotion Service (port 8000)
-npm run dev:dialogue    # Dialogue Service (port 8001)
-npm run dev:memory      # Memory Service (port 3002)
-npm run dev:voice       # Voice Service (port 8003)
-npm run dev:dashboard   # Analytics Dashboard (port 5000)
+npm run dev:api              # API Service (port 3000)
+npm run dev:realtime         # Realtime Gateway (port 3001)
+npm run dev:memory           # Memory Service (port 3002)
+npm run dev:emotion          # Emotion Service (port 8000)
+npm run dev:dialogue         # Dialogue Service (port 8001)
+npm run dev:voice            # Voice/TTS Service (port 8003)
+npm run dev:stt              # Speech Recognition (port 8004)
+npm run dev:voice-dialogue   # Voice Dialogue Orchestrator (port 8005)
+npm run dev:lipsync          # Lip Sync Service (port 8006)
+npm run dev:vision           # Vision Analysis (port 8007)
+npm run dev:dashboard        # Analytics Dashboard (port 5000)
 ```
 
 ### Option 3: Using CLI Tool
@@ -349,16 +353,27 @@ Client->AnalyzeEmotion(EmotionRequest, [](bool Success, const FAGLEmotionRespons
 
 ### Microservices Overview
 
+**Core Microservices (10 services):**
+
 | Service | Port | Technology | Purpose |
 |---------|------|------------|---------|
 | **API Service** | 3000 | NestJS + TypeScript | API Gateway, Auth, Game/Player/Character Management |
 | **Realtime Gateway** | 3001 | Socket.IO + Node.js | WebSocket connections, real-time events |
+| **Memory Service** | 3002 | NestJS + TypeScript | Memory storage, vector search |
 | **Emotion Service** | 8000 | FastAPI + Python | Emotion detection (rule + ML hybrid) |
 | **Dialogue Service** | 8001 | FastAPI + Python | Dialogue generation (template + LLM) |
-| **Memory Service** | 3002 | NestJS + TypeScript | Memory storage, vector search |
-| **Voice Service** | 8003 | FastAPI + Python | Text-to-speech synthesis, voice caching |
+| **Voice Service** | 8003 | FastAPI + Python | Text-to-speech synthesis (TTS) |
+| **STT Service** | 8004 | FastAPI + Python | Speech-to-text recognition (Whisper) |
+| **Voice Dialogue** | 8005 | FastAPI + Python | Voice interaction orchestration (STT+Dialogue+TTS) |
+| **Lip Sync** | 8006 | FastAPI + Python | Lip sync animation generation (phoneme → viseme) |
+| **Vision Service** | 8007 | FastAPI + Python | Game screenshot analysis (GPT-4V + Claude Vision) |
+
+**Support Tools:**
+
+| Tool | Port | Technology | Purpose |
+|------|------|------------|---------|
 | **Dashboard** | 5000 | Flask + Python | Analytics visualization, cost monitoring |
-| **Vision Service** | 8002 | FastAPI + Python | (Template) AI-powered screen analysis |
+| **Monolith Mode** | 3000 | NestJS + SQLite | All-in-one development mode (no Docker required) |
 
 ### Key Design Decisions
 
@@ -468,7 +483,10 @@ Client->AnalyzeEmotion(EmotionRequest, [](bool Success, const FAGLEmotionRespons
 
 - **[3D Model Setup Guide](./docs/3D-MODEL-SETUP-GUIDE.md)** - Avatar models, CDN, 37 animations (7,000+ words)
 - **[Avatar Integration Guide](./sdk/avatar/INTEGRATION-GUIDE.md)** - React Three Fiber integration (5,000+ words)
-- **[Vision Service Guide](./services/vision-service-template/README.md)** - AI screen analysis architecture
+- **[STT Service](./services/stt-service/README.md)** - Speech-to-text with Whisper API, VAD optimization
+- **[Voice Dialogue Service](./services/voice-dialogue-service/README.md)** - Voice interaction orchestration
+- **[Lip Sync Service](./services/lipsync-service/README.md)** - Phoneme extraction and viseme mapping
+- **[Vision Service](./services/vision-service/README.md)** - AI game screenshot analysis (GPT-4V + Claude Vision)
 - **[API Key Management](./docs/API-KEY-MANAGEMENT.md)** - Security guide (20,000+ words)
 
 ### SDK Documentation
@@ -498,15 +516,16 @@ Client->AnalyzeEmotion(EmotionRequest, [](bool Success, const FAGLEmotionRespons
 - **[Phase 4A Complete](./docs/archive/PHASE-4A-COMPLETE-SUMMARY.md)** - Testing, monitoring, CLI (32,000+ words)
 - **[Phase 4B Summary](./docs/PHASE-4B-SUMMARY.md)** - Voice, Dashboard, Vision, Avatar (60,000+ words)
 - **[Phase 4B Fixes](./docs/PHASE-4B-FIXES-SUMMARY.md)** - Code quality improvements (score: 6.3→8.0)
-- **[Phase 5 Roadmap](./docs/PHASE-5-ROADMAP.md)** - STT, Vision, Social features (planned)
+- **[Phase 5 Roadmap](./docs/PHASE-5-ROADMAP.md)** - Voice interaction (STT, Voice Dialogue, Lip Sync), Vision Service
+- **[Phase 5 Completion](./docs/PHASE-5-COMPLETION-REPORT.md)** - Multimodal features completion report
 
 ### Feature Inventory
 
 - **[Product Features](./docs/PRODUCT-FEATURES.md)** - Complete feature catalog (25,000+ words)
-  - 4 core functions
-  - 8 backend services
+  - 3 core functions
+  - 10 backend services
   - 5 client SDKs
-  - 52 API endpoints
+  - 60+ API endpoints
   - 8 business scenarios
 
 ---
@@ -556,24 +575,19 @@ Client->AnalyzeEmotion(EmotionRequest, [](bool Success, const FAGLEmotionRespons
 - **Cost Management** - UTC timezone, 3-level alerting
 - **Overall Score** - 6.3/10 → 8.0/10 (+27%)
 
-### 🚧 Phase 5: Advanced Features (Planned, 3-4 weeks)
-- **Week 1-2: Voice Interaction**
-  - STT Service (speech-to-text, Whisper API)
-  - Voice dialogue integration (end-to-end < 2s)
-  - Lip sync system
-  - Unity/Unreal voice plugins
+### ✅ Phase 5: Multimodal Features (Complete)
+- **Voice Interaction (STT, Voice Dialogue, Lip Sync)**
+  - STT Service - OpenAI Whisper API, VAD, 7-day caching
+  - Voice Dialogue Service - Full pipeline orchestration (STT→Dialogue→TTS)
+  - Lip Sync Service - Phoneme extraction, 15 visemes, multi-format output
+  - 250+ tests, 85%+ coverage
 
-- **Week 3: Vision Service**
-  - Complete GPT-4V / Claude Vision integration
-  - Game screen analysis and tactical advice
-  - Unity/Unreal screen capture plugins
-  - Smart sampling and caching
-
-- **Week 4: Social Features**
-  - Character export/import system
-  - Community template library
-  - Rating and comment system
-  - Frontend portal
+- **Vision Service**
+  - Complete GPT-4V + Claude Vision integration
+  - Game screenshot analysis, scene detection, event recognition
+  - Image optimization (20-40% cost savings)
+  - Smart caching (1-hour TTL), $50/day budget management
+  - 80+ tests, 85%+ coverage
 
 ### 🔮 Phase 6: Production & Commercial (Future)
 - **6A: Production Deployment**
@@ -679,11 +693,11 @@ npm run test:load
 ## 📊 Project Statistics
 
 ### Codebase
-- **Lines of Code**: ~50,000+
-- **Services**: 8 microservices
-- **API Endpoints**: 52 endpoints
+- **Lines of Code**: ~50,000+ (services + SDKs + configuration)
+- **Services**: 10 core microservices + 2 support tools
+- **API Endpoints**: 60+ endpoints
 - **Languages**: TypeScript, Python, C#, C++
-- **Test Coverage**: 85%+ (818+ tests)
+- **Test Coverage**: 85%+ (1,000+ tests)
 
 ### Documentation
 - **Total Words**: 100,000+ words
@@ -732,11 +746,11 @@ This project is currently closed source. Contact the development team for licens
 
 ## 🏆 Achievements
 
-- ✅ **85%+ Test Coverage** - 818+ tests across all components
-- ✅ **8 Microservices** - Production-ready architecture
+- ✅ **85%+ Test Coverage** - 1,000+ tests across all components
+- ✅ **10 Core Microservices** - Production-ready architecture with multimodal features
 - ✅ **100,000+ Words** - Comprehensive documentation
 - ✅ **4 Languages** - Multilingual support (en, zh, ja, ko)
-- ✅ **52 API Endpoints** - Complete REST API
+- ✅ **60+ API Endpoints** - Complete REST API
 - ✅ **Production Ready** - Score 8.0/10, security hardened
 - ✅ **Cost Optimized** - <$0.25 per MAU target
 
@@ -748,7 +762,7 @@ This project is currently closed source. Contact the development team for licens
 
 [Get Started](#-quick-start) • [Read Docs](#-documentation) • [View Examples](./examples)
 
-**Version**: 2.0.0 (Phase 4B Complete)
+**Version**: 2.1.0 (Phase 5 Complete - Multimodal Features)
 **Status**: ✅ Production Ready (Score: 8.0/10)
 **Last Updated**: 2025-11
 
