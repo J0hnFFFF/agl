@@ -89,6 +89,8 @@ npm run dev:monolith
 
 Service runs at `http://localhost:3000` ✨
 
+📖 **More deployment options**: See [ONE-CLICK-DEPLOY.md](./ONE-CLICK-DEPLOY.md) for complete deployment guide
+
 ### Option 2: Microservices Mode (Production-like)
 
 ```bash
@@ -460,6 +462,7 @@ Client->AnalyzeEmotion(EmotionRequest, [](bool Success, const FAGLEmotionRespons
 ### Getting Started
 
 - **[Quick Start Guide](./QUICKSTART.md)** - Get up and running in 5 minutes
+- **[One-Click Deployment](./ONE-CLICK-DEPLOY.md)** - Complete deployment guide with 3 options ⭐
 - **[Monolith Mode Guide](./QUICKSTART-MONOLITH.md)** - Simplified single-service deployment
 - **[Development with SQLite](./docs/development-sqlite.md)** - Lightweight local development
 - **[CLI Tool Guide](./docs/CLI-GUIDE.md)** - Command-line interface documentation

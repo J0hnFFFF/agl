@@ -13,6 +13,7 @@ Quick navigation to all AGL documentation.
 | [README](./README.md) | Project overview and features | 5 min |
 | **[Quick Start](./QUICKSTART.md)** | Get started in 5 minutes | 10 min |
 | **[Monolith Mode](./QUICKSTART-MONOLITH.md)** | Fastest way to start (1 minute) | 5 min |
+| **[One-Click Deployment](./ONE-CLICK-DEPLOY.md)** | Complete deployment guide with 3 options ⭐ | 10 min |
 | [Deployment Guide](./DEPLOYMENT.md) | All deployment options | 15 min |
 
 **Recommended Path**:
@@ -85,6 +86,7 @@ Quick navigation to all AGL documentation.
 
 | Option | Guide | Cost | Difficulty |
 |--------|-------|------|-----------|
+| **One-Click Deploy** | **[One-Click Guide](./ONE-CLICK-DEPLOY.md)** ⭐ | **$0-200/mo** | **⭐** |
 | Local (Monolith) | [Monolith Guide](./QUICKSTART-MONOLITH.md) | $0 | ⭐ |
 | VPS | [Deployment Guide](./DEPLOYMENT.md#vps-deployment-simple) | $5-20/mo | ⭐⭐ |
 | PaaS (Railway/Render) | [Deployment Guide](./DEPLOYMENT.md#platform-as-a-service-paas) | $20-50/mo | ⭐⭐ |
@@ -120,7 +122,12 @@ Quick navigation to all AGL documentation.
 | **Phase 4A** | ✅ Complete | Testing, Monitoring, CLI Tools, Korean | [Phase 4A Summary](./docs/archive/PHASE-4A-COMPLETE-SUMMARY.md) (32,000+ words) |
 | **Phase 4B** | ✅ Complete | Voice, Dashboard, Vision Template, Avatar | [Phase 4B Summary](./docs/PHASE-4B-SUMMARY.md) (60,000+ words) |
 | **Phase 4B Fixes** | ✅ Complete | Code quality improvements (6.3→8.0) | [Fixes Summary](./docs/PHASE-4B-FIXES-SUMMARY.md) (10,000+ words) |
-| **Phase 5** | 📋 Planned | STT, Vision Complete, Social Features | [Phase 5 Roadmap](./docs/PHASE-5-ROADMAP.md) (15,000+ words) |
+| **Phase 5** | ✅ Complete | STT, Voice Dialogue, Lip Sync, Vision | [Phase 5 Completion](./docs/PHASE-5-COMPLETION-REPORT.md) (20,000+ words) |
+
+### Quality Assurance
+
+- **[Verification Report](./docs/VERIFICATION-REPORT.md)** - Left-right game verification (doc ↔ code consistency)
+- **[Corrections Applied](./docs/CORRECTIONS-APPLIED.md)** - Phase 5 corrections execution report
 
 ### Feature Documentation
 
@@ -171,11 +178,11 @@ Quick navigation to all AGL documentation.
 
 ### Project Statistics
 
-- **Lines of Code**: ~50,000+
-- **Services**: 8 microservices
+- **Lines of Code**: ~50,000+ (services + SDKs + configuration)
+- **Services**: 10 core microservices + 2 support tools
 - **API Endpoints**: 52 endpoints
-- **Test Cases**: 818+ tests
-- **Documentation**: 100,000+ words
+- **Test Cases**: 1,000+ tests
+- **Documentation**: 120,000+ words
 - **Languages**: 4 (en, zh, ja, ko)
 - **Test Coverage**: 85%+
 

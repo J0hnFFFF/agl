@@ -69,6 +69,216 @@ services:
     depends_on:
       - redis
 
+  # ==========================================
+  # CORE MICROSERVICES (10 services)
+  # Uncomment to enable full stack deployment
+  # ==========================================
+  #
+  # NOTE: Full Docker deployment requires Dockerfiles for each service (not yet created)
+  #
+  # 📖 RECOMMENDED DEPLOYMENT OPTIONS:
+  #   - Beginners: npm run dev:monolith (60s startup, no Docker required)
+  #   - Developers: npm run dev:stack + manual service startup (flexible debugging)
+  #   - Production: See docs/deployment-guide.md for Kubernetes deployment
+  #   - Quick Deploy: Run ./start-all.sh or start-all.bat for interactive setup
+  #
+  # 🎯 OPEN SOURCE ENGINE PHILOSOPHY:
+  #   We provide flexible deployment options rather than prescriptive Docker images.
+  #   This allows developers to customize their deployment based on their needs.
+  #   For full details, see: ONE-CLICK-DEPLOY.md
+  #
+
+  # 1. API Service (Port 3000)
+  # api-service:
+  #   build:
+  #     context: ./services/api-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-api-service
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DATABASE_URL=postgresql://agl_user:agl_password_dev@postgres:5432/agl_dev
+  #     - REDIS_URL=redis://redis:6379
+  #     - JWT_SECRET=${JWT_SECRET:-dev-secret}
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - agl-network
+
+  # 2. Realtime Gateway (Port 3001)
+  # realtime-gateway:
+  #   build:
+  #     context: ./services/realtime-gateway
+  #     dockerfile: Dockerfile
+  #   container_name: agl-realtime-gateway
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - REDIS_URL=redis://redis:6379
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # 3. Memory Service (Port 3002)
+  # memory-service:
+  #   build:
+  #     context: ./services/memory-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-memory-service
+  #   ports:
+  #     - "3002:3002"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DATABASE_URL=postgresql://agl_user:agl_password_dev@postgres:5432/agl_dev
+  #     - REDIS_URL=redis://redis:6379
+  #     - QDRANT_URL=http://qdrant:6333
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #     - qdrant
+  #   networks:
+  #     - agl-network
+
+  # 4. Emotion Service (Port 8000)
+  # emotion-service:
+  #   build:
+  #     context: ./services/emotion-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-emotion-service
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # 5. Dialogue Service (Port 8001)
+  # dialogue-service:
+  #   build:
+  #     context: ./services/dialogue-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-dialogue-service
+  #   ports:
+  #     - "8001:8001"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # 6. Voice Service / TTS (Port 8003)
+  # voice-service:
+  #   build:
+  #     context: ./services/voice-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-voice-service
+  #   ports:
+  #     - "8003:8003"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # 7. STT Service (Port 8004)
+  # stt-service:
+  #   build:
+  #     context: ./services/stt-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-stt-service
+  #   ports:
+  #     - "8004:8004"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # 8. Voice Dialogue Service (Port 8005)
+  # voice-dialogue-service:
+  #   build:
+  #     context: ./services/voice-dialogue-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-voice-dialogue-service
+  #   ports:
+  #     - "8005:8005"
+  #   environment:
+  #     - STT_SERVICE_URL=http://stt-service:8004
+  #     - DIALOGUE_SERVICE_URL=http://dialogue-service:8001
+  #     - VOICE_SERVICE_URL=http://voice-service:8003
+  #   depends_on:
+  #     - stt-service
+  #     - dialogue-service
+  #     - voice-service
+  #   networks:
+  #     - agl-network
+
+  # 9. Lip Sync Service (Port 8006)
+  # lipsync-service:
+  #   build:
+  #     context: ./services/lipsync-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-lipsync-service
+  #   ports:
+  #     - "8006:8006"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # 10. Vision Service (Port 8007)
+  # vision-service:
+  #   build:
+  #     context: ./services/vision-service
+  #     dockerfile: Dockerfile
+  #   container_name: agl-vision-service
+  #   ports:
+  #     - "8007:8007"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - agl-network
+
+  # Dashboard (Port 5000)
+  # dashboard:
+  #   build:
+  #     context: ./services/dashboard
+  #     dockerfile: Dockerfile
+  #   container_name: agl-dashboard
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     - REDIS_URL=redis://redis:6379
+  #     - DATABASE_URL=postgresql://agl_user:agl_password_dev@postgres:5432/agl_dev
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #   networks:
+  #     - agl-network
+
 volumes:
   postgres_data:
   redis_data:

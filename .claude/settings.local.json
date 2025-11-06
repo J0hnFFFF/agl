@@ -8,7 +8,10 @@
       "Bash(nul)",
       "Bash(find:*)",
       "Bash(done)",
-      "Bash(tr:*)"
+      "Bash(tr:*)",
+      "Bash(for dir in services/{stt-service,voice-dialogue-service,lipsync-service,vision-service,api-service,emotion-service})",
+      "Bash(do echo -n \"$dir: \")",
+      "Bash([ -f \"$dir/Dockerfile\" ])"
     ],
     "deny": [],
     "ask": []
